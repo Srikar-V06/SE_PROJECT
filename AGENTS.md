@@ -69,7 +69,6 @@ Resource notes use these sections: Summary, Key points, Relevance to this projec
 - Every ADR cites at least one brain note.
 - Tests must pass before merge. AI must not edit tests just to make them pass.
 - Do not invent facts or sources. If a source cannot be read, say so.
-
 - Before opening a PR, run `python scripts/validate_brain.py` and `python scripts/validate_skills.py`.
 
 ## Project commands
