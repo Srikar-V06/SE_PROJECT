@@ -11,5 +11,6 @@
 - [[github-actions]] - GitHub Actions workflows, jobs and CI checks
 - [[testing-strategy]] - unit, integration and system testing approach
 - [[mcp-skills-reference]] - Model Context Protocol and skills reference
+- [[idempotency-keys]] - safe retries for keyed operations
 
 ## Archive
