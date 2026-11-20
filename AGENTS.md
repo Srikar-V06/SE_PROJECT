@@ -52,8 +52,8 @@ Resource notes use these sections: Summary, Key points, Relevance to this projec
 ## Skills directory
 - Skills live in skills/<skill-name>/SKILL.md
 - The folder name must match the name in the SKILL.md frontmatter.
-- Current skills: brain-ingest, brain refine
-- Planned skills: brain-refine, brain-query, local-check, simulate-transfer
+- Current skills: brain-ingest, brain refine, brain-query
+- Planned skills: local-check, simulate-transfer
 - Every skill cites at least one brain note.
 
 ## Rules for AI-assisted development
