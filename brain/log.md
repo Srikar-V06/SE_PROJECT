@@ -20,3 +20,6 @@
 - 2026-11-20 | add | docs/adr/ADR-003-append-only-ledger-reversals.md | Srikar-V06 | PR #17
 - 2026-11-20 | add | docs/adr/ADR-004-cross-currency-rejection.md | Srikar-V06 | PR #17
 - 2026-11-20 | add | docs/adr/ADR-009-hash-chain-entry-id.md | Srikar-V06 | PR #17
+- 2026-11-22 | update | completed sqlite-acid-wal research note | Vishwa-Pradyumna
+- 2026-11-22 | add | ai-session-api-design | Vishwa-Pradyumna
+- 2026-11-22 | add | Step 7 architecture, providers, OpenAPI, UML and ADRs | Vishwa-Pradyumna
