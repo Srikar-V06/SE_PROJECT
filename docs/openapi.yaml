@@ -1,0 +1,802 @@
+openapi: 3.1.0
+
+info:
+  title: Financial Ledger and Digital Wallet API
+  version: 0.1.0
+  description: Phase 2 API design draft based on SRS v2.0
+
+security:
+  - bearerAuth: []
+
+paths:
+
+  /health:
+    get:
+      summary: Check application health
+      security: []
+      responses:
+        '200':
+          description: Application is running
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /app:
+    get:
+      summary: Serve the static wallet application
+      security: []
+      responses:
+        '200':
+          description: Web application
+          content:
+            text/html:
+              schema:
+                type: string
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /auth/register:
+    post:
+      summary: Register a new USER account
+      description: FR-6.1
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          description: DUPLICATE_EMAIL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /auth/login:
+    post:
+      summary: Authenticate user and create session
+      description: FR-6.2
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /auth/logout:
+    post:
+      summary: Revoke current session
+      description: FR-6.5
+      responses:
+        '200':
+          description: Session revoked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /auth/me:
+    get:
+      summary: Get authenticated user details
+      description: FR-6.5
+      responses:
+        '200':
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /users/{user_id}/wallets:
+    post:
+      summary: Create a wallet
+      description: FR-1.2. The path user must be the authenticated caller.
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWalletRequest'
+      responses:
+        '201':
+          description: Wallet created with zero balance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          description: WALLET_EXISTS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /users/me/wallets:
+    get:
+      summary: List wallets owned by caller
+      description: FR-1.4
+      responses:
+        '200':
+          description: List of owned wallets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Wallet'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /wallets/{wallet_id}:
+    get:
+      summary: Get a wallet and its balance
+      description: FR-1.4. Accessible to the owner or an ADMIN.
+      parameters:
+        - $ref: '#/components/parameters/WalletId'
+      responses:
+        '200':
+          description: Wallet details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /wallets/{wallet_id}/fund:
+    post:
+      summary: Fund a wallet from system treasury
+      description: FR-1.5. ADMIN only.
+      parameters:
+        - $ref: '#/components/parameters/WalletId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FundingRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/TransactionCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/KeyConflict'
+        '503':
+          $ref: '#/components/responses/DatabaseBusy'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /transfers:
+    post:
+      summary: Transfer funds between wallets
+      description: FR-2 and FR-3. The caller must own the sender wallet.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/TransactionCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/KeyConflict'
+        '422':
+          description: INSUFFICIENT_FUNDS or CURRENCY_MISMATCH
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          $ref: '#/components/responses/DatabaseBusy'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /transactions/{transaction_id}/reverse:
+    post:
+      summary: Reverse an existing transaction
+      description: FR-4.3 and FR-4.4. ADMIN only.
+      parameters:
+        - $ref: '#/components/parameters/TransactionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReversalRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/TransactionCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: >
+            ALREADY_REVERSED, REVERSAL_OF_REVERSAL
+            or IDEMPOTENCY_KEY_REUSED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: REVERSAL_OVERDRAW
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          $ref: '#/components/responses/DatabaseBusy'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /transactions/{transaction_id}:
+    get:
+      summary: Get transaction details and ledger entries
+      description: FR-4.7. Participant or ADMIN only.
+      parameters:
+        - $ref: '#/components/parameters/TransactionId'
+      responses:
+        '200':
+          description: Transaction details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /ledger-entries:
+    get:
+      summary: Retrieve paginated ledger entries
+      description: >
+        FR-4.6. USER accounts must provide an owned wallet_id.
+        ADMIN accounts may query globally. Entries are ordered
+        by ascending entry_id.
+      parameters:
+        - name: wallet_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: transaction_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: Paginated ledger entries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LedgerPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /admin/reconciliation:
+    get:
+      summary: Reconcile ledger and wallet balances
+      description: >
+        FR-5. ADMIN only. Read-only check using one
+        consistent database snapshot.
+      responses:
+        '200':
+          description: Reconciliation report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationReport'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Opaque bearer session token
+
+  parameters:
+
+    UserId:
+      name: user_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/UUID'
+
+    WalletId:
+      name: wallet_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/UUID'
+
+    TransactionId:
+      name: transaction_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/UUID'
+
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: Unique per authenticated user, retained for at least 24 hours.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 128
+
+  responses:
+
+    BadRequest:
+      description: VALIDATION_ERROR
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Unauthorized:
+      description: UNAUTHENTICATED
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Forbidden:
+      description: FORBIDDEN
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotFound:
+      description: NOT_FOUND
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    KeyConflict:
+      description: IDEMPOTENCY_KEY_REUSED
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    DatabaseBusy:
+      description: DB_BUSY
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    InternalError:
+      description: INTERNAL_ERROR
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    TransactionCreated:
+      description: Transaction created or original response replayed
+      headers:
+        Idempotent-Replayed:
+          description: Present with value true when replaying a stored response
+          schema:
+            type: boolean
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Transaction'
+
+  schemas:
+
+    UUID:
+      type: string
+      format: uuid
+
+    Currency:
+      type: string
+      enum: [INR, USD]
+
+    Role:
+      type: string
+      enum: [USER, ADMIN]
+
+    Timestamp:
+      type: string
+      format: date-time
+      description: ISO 8601 UTC timestamp
+
+    AmountMinor:
+      type: integer
+      minimum: 1
+      maximum: 1000000000000
+      description: >
+        Strict JSON integer in minor units. Floats,
+        exponent notation, strings and booleans are rejected.
+
+    Error:
+      type: object
+      required: [code, message]
+      additionalProperties: false
+      properties:
+        code:
+          type: string
+          enum:
+            - VALIDATION_ERROR
+            - UNAUTHENTICATED
+            - FORBIDDEN
+            - NOT_FOUND
+            - DUPLICATE_EMAIL
+            - WALLET_EXISTS
+            - IDEMPOTENCY_KEY_REUSED
+            - ALREADY_REVERSED
+            - REVERSAL_OF_REVERSAL
+            - INSUFFICIENT_FUNDS
+            - CURRENCY_MISMATCH
+            - REVERSAL_OVERDRAW
+            - DB_BUSY
+            - INTERNAL_ERROR
+        message:
+          type: string
+
+    HealthResponse:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          const: ok
+
+    MessageResponse:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+
+    RegisterRequest:
+      type: object
+      additionalProperties: false
+      required: [name, email, password]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 12
+          maxLength: 128
+          writeOnly: true
+
+    LoginRequest:
+      type: object
+      additionalProperties: false
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 12
+          maxLength: 128
+          writeOnly: true
+
+    LoginResponse:
+      type: object
+      required: [token, expires_in, role]
+      properties:
+        token:
+          type: string
+        expires_in:
+          type: integer
+          const: 1800
+        role:
+          $ref: '#/components/schemas/Role'
+
+    User:
+      type: object
+      required: [user_id, name, email, role]
+      properties:
+        user_id:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        role:
+          $ref: '#/components/schemas/Role'
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+
+    CreateWalletRequest:
+      type: object
+      additionalProperties: false
+      required: [currency]
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+
+    Wallet:
+      type: object
+      required: [wallet_id, user_id, currency, balance_minor, created_at]
+      properties:
+        wallet_id:
+          $ref: '#/components/schemas/UUID'
+        user_id:
+          $ref: '#/components/schemas/UUID'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        balance_minor:
+          type: integer
+          minimum: 0
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+
+    FundingRequest:
+      type: object
+      additionalProperties: false
+      required: [amount_minor]
+      properties:
+        amount_minor:
+          $ref: '#/components/schemas/AmountMinor'
+        description:
+          type: string
+
+    TransferRequest:
+      type: object
+      additionalProperties: false
+      required: [sender_wallet_id, recipient_wallet_id, amount_minor]
+      properties:
+        sender_wallet_id:
+          $ref: '#/components/schemas/UUID'
+        recipient_wallet_id:
+          $ref: '#/components/schemas/UUID'
+        amount_minor:
+          $ref: '#/components/schemas/AmountMinor'
+        description:
+          type: string
+
+    ReversalRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+
+    Transaction:
+      type: object
+      required:
+        - transaction_id
+        - type
+        - reversal_of_transaction_id
+        - description
+        - created_at
+        - entries
+      properties:
+        transaction_id:
+          $ref: '#/components/schemas/UUID'
+        type:
+          type: string
+          enum: [FUNDING, TRANSFER, REVERSAL]
+        reversal_of_transaction_id:
+          type: [string, 'null']
+          format: uuid
+        description:
+          type: [string, 'null']
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+        entries:
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/LedgerEntry'
+
+    LedgerEntry:
+      type: object
+      required:
+        - entry_id
+        - transaction_id
+        - account_id
+        - direction
+        - amount_minor
+        - currency
+        - prev_hash
+        - entry_hash
+        - created_at
+      properties:
+        entry_id:
+          type: integer
+          minimum: 1
+        transaction_id:
+          $ref: '#/components/schemas/UUID'
+        account_id:
+          $ref: '#/components/schemas/UUID'
+        direction:
+          type: string
+          enum: [DEBIT, CREDIT]
+        amount_minor:
+          $ref: '#/components/schemas/AmountMinor'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        prev_hash:
+          type: string
+          pattern: '^[a-f0-9]{64}$'
+        entry_hash:
+          type: string
+          pattern: '^[a-f0-9]{64}$'
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+
+    LedgerPage:
+      type: object
+      required: [entries, limit, offset]
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/LedgerEntry'
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    ReconciliationReport:
+      type: object
+      required:
+        - overall_status
+        - checked_transactions
+        - checked_wallets
+        - checked_entries
+        - failing_transaction_ids
+        - failing_wallet_ids
+        - failing_entry_ids
+        - failing_currencies
+        - generated_at
+      properties:
+        overall_status:
+          type: string
+          enum: [PASS, FAIL]
+        checked_transactions:
+          type: integer
+          minimum: 0
+        checked_wallets:
+          type: integer
+          minimum: 0
+        checked_entries:
+          type: integer
+          minimum: 0
+        failing_transaction_ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/UUID'
+        failing_wallet_ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/UUID'
+        failing_entry_ids:
+          type: array
+          items:
+            type: integer
+          description: Includes the first broken hash-chain entry when applicable.
+        failing_currencies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Currency'
+        generated_at:
+          $ref: '#/components/schemas/Timestamp'
