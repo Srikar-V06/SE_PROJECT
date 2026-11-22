@@ -13,10 +13,10 @@
 - 2026-11-18 | ingest | uploaded SRS 
 - 2026-11-18 | update | updated traceability matrix according to SRS
 - 2026-11-18 | update | updated some md files
-- 2026-11-20 | add | docs/diagrams/er-diagram.md (Mermaid ER diagram, seven tables) | Srikar-V06 | PR #7
-- 2026-11-20 | add | docs/schema.sql (tables, constraints, immutability triggers, treasury seed) | Srikar-V06 | PR #7
-- 2026-11-20 | add | scripts/check_schema.py (schema rejection tests) | Srikar-V06 | PR #7
-- 2026-11-20 | add | docs/design/hash-chain.md and scripts/hash_example.py | Srikar-V06 | PR #7
-- 2026-11-20 | add | docs/adr/ADR-003-append-only-ledger-reversals.md | Srikar-V06 | PR #7
-- 2026-11-20 | add | docs/adr/ADR-004-cross-currency-rejection.md | Srikar-V06 | PR #7
-- 2026-11-20 | add | docs/adr/ADR-009-hash-chain-entry-id.md | Srikar-V06 | PR #7
+- 2026-11-20 | add | docs/diagrams/er-diagram.md (Mermaid ER diagram, seven tables) | Srikar-V06 | PR #17
+- 2026-11-20 | add | docs/schema.sql (tables, constraints, immutability triggers, treasury seed) | Srikar-V06 | PR #17
+- 2026-11-20 | add | scripts/check_schema.py (schema rejection tests) | Srikar-V06 | PR #17
+- 2026-11-20 | add | docs/design/hash-chain.md and scripts/hash_example.py | Srikar-V06 | PR #17
+- 2026-11-20 | add | docs/adr/ADR-003-append-only-ledger-reversals.md | Srikar-V06 | PR #17
+- 2026-11-20 | add | docs/adr/ADR-004-cross-currency-rejection.md | Srikar-V06 | PR #17
+- 2026-11-20 | add | docs/adr/ADR-009-hash-chain-entry-id.md | Srikar-V06 | PR #17
