@@ -15,11 +15,19 @@ After new notes are added, or before a stage review.
    matching folder, and add it to index.md.
 3. Look for duplicate notes on the same topic. Propose a merge to the human.
    Keep every source URL. Never delete a note without human approval.
-4. Run `python scripts/validate_brain.py`. Fix each broken [[wikilink]] by
-   correcting the name or removing the link.
-5. Check every note has requirement IDs and at least one link to another note.
-6. Add one line per action to brain/log.md.
-7. Run both validators and report what changed.
+4. Audit every note in brain/ except index.md and log.md for all required
+   frontmatter fields, at least one valid [[wikilink]], requirement IDs (or an
+   explicit empty list), and index coverage. Resource notes also need Summary,
+   Key points, and Relevance to this project sections. Flag placeholder sources
+   or placeholder body text; never invent sources or project facts to fill them.
+5. Check the `author` before changing an existing note. For a note authored by
+   another team member, record the missing information and ask its author to
+   update it through the related issue or PR. Do not silently rewrite it.
+6. Run `python scripts/validate_brain.py`. Fix each broken [[wikilink]] by
+   correcting the name or removing the link, and manually check the note schema
+   because the validator only checks frontmatter presence and link targets.
+7. Add one line per brain action to brain/log.md.
+8. Run both validators and report completed work separately from owner follow-up.
 
 ## Rules
 - Do not invent facts or sources.
