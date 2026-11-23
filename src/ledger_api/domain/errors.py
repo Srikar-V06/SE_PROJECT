@@ -25,6 +25,12 @@ class ConflictError(LedgerError):
     code = "CONFLICT"
 
 
+class InsufficientFundsError(LedgerError):
+    """A wallet does not have enough available balance for the operation."""
+
+    code = "INSUFFICIENT_FUNDS"
+
+
 class ValidationError(LedgerError, ValueError):
     """Input cannot be represented by the domain model."""
 
