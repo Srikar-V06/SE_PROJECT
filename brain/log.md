@@ -31,3 +31,4 @@
 - 2026-11-23 | add | skill-eval-brain-refine | haneeshreddy9
 - 2026-11-23 | add | skill-eval-brain-query | haneeshreddy9
 - 2026-11-23 | add | skill-eval-local-check | haneeshreddy9
+- 2026-11-23 | add and index | [[ai-session-auth-wallets]] | recorded Phase 3 implementation, prerequisite gaps and verification | Srikar-V06
