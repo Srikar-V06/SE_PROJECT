@@ -2,7 +2,8 @@ import sqlite3
 
 db = sqlite3.connect(":memory:")
 db.execute("PRAGMA foreign_keys = ON")
-db.executescript(open("docs/schema.sql").read())
+with open("docs/schema.sql", encoding="utf-8") as file:
+    db.executescript(file.read())
 
 def must_fail(label, sql):
     try:

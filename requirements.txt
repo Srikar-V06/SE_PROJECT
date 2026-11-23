@@ -1,0 +1,7 @@
+-e .
+build
+setuptools>=68
+wheel
+pytest
+httpx
+ruff
