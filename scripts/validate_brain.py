@@ -1,4 +1,7 @@
-import sys, pathlib, re
+import pathlib
+import re
+import sys
+
 notes = list(pathlib.Path("brain").rglob("*.md"))
 names = {n.stem for n in notes}
 errors = []
