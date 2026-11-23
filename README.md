@@ -25,5 +25,19 @@ Stage 1 – Requirements (in progress).
 4. Get one review and a green CI.
 5. Merge.
 
-## How to run
-Added in Phase 3.
+## Backend foundation
+
+The Phase 3 backend package uses Python 3.11 or later and the Python
+standard library. Install it from the repository root and initialize a
+SQLite database with:
+
+```powershell
+python -m pip install -e .
+python -c "from ledger_api.db import SQLiteDatabase; SQLiteDatabase('data/ledger.sqlite3').initialize()"
+```
+
+The database provider enables WAL, foreign keys, a five-second busy timeout
+and FULL synchronous mode. Financial writes should use
+`SQLiteDatabase.write_transaction()` and pass its connection to every
+repository participating in the operation. API/server commands will be
+added with the API layer.
