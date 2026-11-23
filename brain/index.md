@@ -2,6 +2,7 @@
 
 ## Projects
 - [[ai-session-phase2-brain-refine]] - AI-assisted record of Bharath's Phase 2 brain refinement and skill evaluations (draft for human review).
+- [[ai-session-phase3-backend-core]] - AI-assisted record of the Phase 3 backend core implementation commits (draft for human review).
 
 ## Areas
 
