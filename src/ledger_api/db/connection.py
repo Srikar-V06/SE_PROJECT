@@ -14,14 +14,15 @@ class SQLiteDatabase:
     """Provides short-lived SQLite connections configured for this service."""
 
     def __init__(self, path: str | Path, *, busy_timeout_ms: int = 5_000) -> None:
+        if str(path) == ":memory:":
+            raise ValueError("SQLiteDatabase requires a file-backed database path")
         self.path = Path(path)
         self.busy_timeout_ms = busy_timeout_ms
         if busy_timeout_ms <= 0:
             raise ValueError("busy_timeout_ms must be positive")
 
     def _open(self) -> sqlite3.Connection:
-        if str(self.path) != ":memory:":
-            self.path.parent.mkdir(parents=True, exist_ok=True)
+        self.path.parent.mkdir(parents=True, exist_ok=True)
         conn = sqlite3.connect(
             str(self.path),
             timeout=self.busy_timeout_ms / 1_000,
