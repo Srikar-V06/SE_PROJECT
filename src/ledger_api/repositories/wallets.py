@@ -11,6 +11,12 @@ from ledger_api.repositories._base import raise_conflict
 
 
 class WalletRepository:
+    def list_for_user(self, user_id: str) -> list[sqlite3.Row]:
+        return self._connection.execute(
+            "SELECT wallet_id, user_id, currency, balance_minor, created_at FROM wallets "
+            "WHERE user_id = ? ORDER BY created_at, wallet_id", (user_id,)
+        ).fetchall()
+
     def __init__(self, connection: sqlite3.Connection) -> None:
         self._connection = connection
 

@@ -39,5 +39,24 @@ python -c "from ledger_api.db import SQLiteDatabase; SQLiteDatabase('data/ledger
 The database provider enables WAL, foreign keys, a five-second busy timeout
 and FULL synchronous mode. Financial writes should use
 `SQLiteDatabase.write_transaction()` and pass its connection to every
-repository participating in the operation. API/server commands will be
-added with the API layer.
+repository participating in the operation.
+
+## Run the API and provision administrators
+
+From the repository root, install the project with `python -m pip install -e .`.
+Run `python -m uvicorn ledger_api.main:app --host 127.0.0.1` and open
+`http://127.0.0.1:8000/app/` or the interactive API at `/docs`.
+Startup applies migrations to `data/ledger.sqlite3`. To use a different
+database, set `LEDGER_DB_PATH` to the same absolute path for both the API and CLI.
+
+Run the following commands locally with access to that database:
+
+```powershell
+python -m app.cli create-admin --email admin@example.org --name "Administrator"
+python -m app.cli grant-admin --email existing-user@example.org
+```
+
+Creation prompts for a password without echoing it. Grant promotes an
+existing account. Public registration creates a USER. Login returns a bearer
+token valid for 30 minutes. Send it in the Authorization header as
+`Bearer <token>`. Logout revokes that session.

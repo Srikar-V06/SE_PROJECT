@@ -7,6 +7,13 @@ from ledger_api.repositories._base import raise_conflict
 
 
 class UserRepository:
+    def grant_admin(self, normalized_email: str) -> None:
+        result = self._connection.execute(
+            "UPDATE users SET role = 'ADMIN' WHERE normalized_email = ?", (normalized_email,)
+        )
+        if not result.rowcount:
+            raise NotFoundError("user not found")
+
     def __init__(self, connection: sqlite3.Connection) -> None:
         self._connection = connection
 
