@@ -1,0 +1,31 @@
+"""Application errors that can be handled consistently by API layers."""
+
+
+class LedgerError(Exception):
+    """Base class for expected application failures."""
+
+    code = "LEDGER_ERROR"
+
+
+class DatabaseBusyError(LedgerError):
+    """The SQLite writer lock could not be acquired within the timeout."""
+
+    code = "DB_BUSY"
+
+
+class NotFoundError(LedgerError):
+    """A requested record does not exist or is not visible to the caller."""
+
+    code = "NOT_FOUND"
+
+
+class ConflictError(LedgerError):
+    """A request conflicts with existing state or a uniqueness rule."""
+
+    code = "CONFLICT"
+
+
+class ValidationError(LedgerError, ValueError):
+    """Input cannot be represented by the domain model."""
+
+    code = "VALIDATION_ERROR"
