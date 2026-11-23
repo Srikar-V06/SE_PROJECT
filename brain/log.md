@@ -26,3 +26,5 @@
 - 2026-11-22 | ai-session | phase2-brain-refine | BharathVikas-T | draft for review
 - 2026-11-22 | add | ai-session-api-design | Vishwa-Pradyumna
 - 2026-11-22 | add | Step 7 architecture, providers, OpenAPI, UML and ADRs | Vishwa-Pradyumna
+- 2026-11-23 | ai-session | ai-session-phase3-backend-core | recorded Phase 3 backend commits 00d443b, b9f33bd and 20b3f26 for human review | BharathVikas-T
+- 2026-11-23 | branch | phase3-ledger-recovery | recreated from the Phase 3 ledger tip a21cd04 to preserve the implementation and log updates | BharathVikas-T
