@@ -41,3 +41,7 @@ Implement Bharath's Phase 3 backend-core assignment in three reviewable commits 
 ## Review notes
 
 All financial writes must use one `BEGIN IMMEDIATE` transaction and pass the same SQLite connection into participating repositories. Ledger entries use the stored timestamp and explicit sequential `entry_id` in the hash calculation. A teammate should review the implementation and verify the requirements-to-test traceability before merge.
+
+## Branch recovery
+
+On 2026-11-23, `phase3-ledger-recovery` was created from commit `a21cd04` after Bharath reported that the previous branch had been deleted. The current checkout still contained that tip, so the recovery branch preserves the original ledger implementation and log-update commits without rewriting their history.
