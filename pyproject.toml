@@ -22,3 +22,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 ledger_api = ["db/migrations/*.sql", "static/*.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
