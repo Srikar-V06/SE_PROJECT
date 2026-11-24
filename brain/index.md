@@ -32,6 +32,7 @@
 - [[skill-eval-brain-query]] - Brain query evaluation
 - [[skill-eval-brain-refine]] - Brain refinement evaluation
 - [[skill-eval-local-check]] - Local verification evaluation
+- [[ai-session-phase3-unit-tests]] - Phase 3 unit tests, fixtures and CI coverage
 ## Areas
 
 ## Resources
