@@ -37,3 +37,4 @@
 - 2026-11-25 | update | completed double-entry-bookkeeping research note | Vishwa-Pradyumna
 - 2026-11-25 | update | completed integer-minor-units research note | Vishwa-Pradyumna
 - 2026-11-25 | update | indexed skill evaluation notes | Vishwa-Pradyumna
+- 2026-11-25 | add and index | [[ai-session-phase3-unit-tests]] | recorded Phase 3 unit tests, isolated fixtures, provider fakes and CI coverage checks; merged PRs #29-32 with 45 passing tests and 86% coverage | Vishwa-Pradyumna
