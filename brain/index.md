@@ -29,6 +29,9 @@
 - [[ai-session-api-design]] - Phase 2 architecture and API design
 - [[ai-session-dev-planning-ci]] - AI-assisted development planning, CI and testing
 - [[ai-session-ui-design]] - UI design and browser session management
+- [[skill-eval-brain-query]] - Brain query evaluation
+- [[skill-eval-brain-refine]] - Brain refinement evaluation
+- [[skill-eval-local-check]] - Local verification evaluation
 ## Areas
 
 ## Resources

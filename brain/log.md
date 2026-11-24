@@ -34,3 +34,6 @@
 - 2026-11-23 | add and index | [[ai-session-auth-wallets]] | recorded Phase 3 implementation, prerequisite gaps and verification | Srikar-V06
 - 2026-11-25 | add | docs/ui-design.md and ADR-010 | Vishwa-Pradyumna
 - 2026-11-25 | ai-session | ai-session-ui-design | Vishwa-Pradyumna
+- 2026-11-25 | update | completed double-entry-bookkeeping research note | Vishwa-Pradyumna
+- 2026-11-25 | update | completed integer-minor-units research note | Vishwa-Pradyumna
+- 2026-11-25 | update | indexed skill evaluation notes | Vishwa-Pradyumna

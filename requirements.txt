@@ -5,3 +5,5 @@ wheel
 pytest
 httpx
 ruff
+pytest-cov
+PyYAML
