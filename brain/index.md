@@ -4,6 +4,7 @@
 - [[ai-session-phase2-brain-refine]] - AI-assisted record of Bharath's Phase 2 brain refinement and skill evaluations (draft for human review).
 - [[ai-session-phase3-backend-core]] - AI-assisted record of the Phase 3 backend core implementation commits (draft for human review).
 - [[ai-session-auth-wallets]] - Phase 3 auth, wallet and admin CLI implementation and prerequisite checks.
+- ⁠[[ai-session-phase4-posting-engine]] - Phase 4 atomic double-entry transaction posting engine and rollback verification.
 
 ## Areas
 
