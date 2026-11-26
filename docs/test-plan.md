@@ -100,10 +100,11 @@ Every push and pull request must run:
 
 ## Test Status
 
-Only the GET /health test is introduced by the walking skeleton.
-
-The remaining tests are planned for Phases 3 to 6 and must not be
-reported as passed before being implemented and executed.
+The Phase 4 API verification branch adds direct integration coverage for
+funding, transfer authorization, validation, idempotent replay and concurrent
+identical requests. Broader Phase 5 system, reconciliation, performance and
+cross-platform tests remain planned and must not be reported as passed before
+being implemented and executed.
 
 ## References
 
@@ -143,6 +144,15 @@ rollback on action failure, concurrent identical requests, key validation
 and the 24-hour minimum retention period. The branch also verifies that
 `IDEMPOTENCY_KEY_REUSED` uses the shared JSON error shape and HTTP 409.
 
-Wallet funding and transfer API integration are local work pending review.
-Endpoint-level test coverage and verification remain outstanding for these
-changes.
+PRs #41 and #42 merged the funding and transfer API integration. The local
+`test/phase4-wallet-operations` follow-up adds direct endpoint coverage for
+admin funding and replay, transfer ownership, self-transfer rejection,
+currency mismatch, insufficient funds and concurrent identical retries.
+
+The full local suite passed with 62 tests. Ruff, brain validation, skill
+validation, brain schema audit, Python compilation and a wheel build using
+`--no-isolation` passed. The normal isolated build in `scripts/local_check.py`
+could not download `setuptools` because DNS/network access was unavailable;
+the PR #42 GitHub build check passed. API tests exposed that service-level
+`VALIDATION_ERROR` exceptions were returned as HTTP 500; the follow-up maps
+them to HTTP 400, and the self-transfer API test now covers that response.

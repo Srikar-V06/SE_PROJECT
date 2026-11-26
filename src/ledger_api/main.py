@@ -49,6 +49,7 @@ async def http_error(request, exc):
 @app.exception_handler(LedgerError)
 async def domain_error(request, exc):
     statuses = {
+        "VALIDATION_ERROR": 400,
         "UNAUTHENTICATED": 401,
         "FORBIDDEN": 403,
         "NOT_FOUND": 404,
