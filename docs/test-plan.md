@@ -116,8 +116,8 @@ reported as passed before being implemented and executed.
 | Test area | Requirement |
 |---|---|
 | Financial request integer boundary validation | TQ-5, NFR-16 |
-| Idempotency expiry and replay | FR-2.8, NFR-18 |
-| Concurrent identical requests | FR-3.4 |
+| Idempotency expiry and replay | FR-2.8, NFR-18 | `tests/test_idempotency.py` |
+| Concurrent identical requests | FR-3.4 | `tests/test_idempotency.py` |
 | Ledger integrity detection | AC-4.3 |
 | Reconciliation mismatch detection | AC-5.2 |
 | Restart durability | NFR-7 |
@@ -134,3 +134,14 @@ reported 45 passing tests and 86% code coverage.
 
 Tests for production helpers that have not yet been implemented
 remain pending.
+
+## Phase 4 local idempotency verification
+
+The unmerged `feat/idempotency` branch adds coverage for canonical request
+hashing, successful response replay, mismatched-key conflicts, expiration,
+rollback on action failure, concurrent identical requests, key validation
+and the 24-hour minimum retention period. The branch also verifies that
+`IDEMPOTENCY_KEY_REUSED` uses the shared JSON error shape and HTTP 409.
+
+These results describe local branch verification only; they are not a merged
+CI result. Update this section with the PR and CI run after review and merge.

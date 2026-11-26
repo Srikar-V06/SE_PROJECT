@@ -2,7 +2,7 @@
 
 import sqlite3
 
-from ledger_api.domain.errors import ConflictError, ValidationError
+from ledger_api.domain.errors import IdempotencyKeyReused, ValidationError
 
 
 class IdempotencyRepository:
@@ -50,4 +50,13 @@ class IdempotencyRepository:
                 ),
             )
         except sqlite3.IntegrityError as exc:
-            raise ConflictError("idempotency key already exists or user is unknown") from exc
+            raise IdempotencyKeyReused(
+                "Idempotency key conflicts with an existing record"
+            ) from exc
+
+    def delete(self, user_id: str, key: str) -> None:
+        """Remove an expired record while the caller holds the write lock."""
+        self._connection.execute(
+            "DELETE FROM idempotency_keys WHERE user_id = ? AND key = ?",
+            (user_id, key),
+        )

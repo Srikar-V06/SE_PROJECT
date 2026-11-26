@@ -8,8 +8,8 @@ or linked to its GitHub Issue.
 | Requirement | Issue | PR | Test | Skill | Brain note |
 |---|---|---|---|---|---|
 | FR-1 Wallet initialization | Pending | #17, #21, #27 | test_auth_wallets.py | local-check | double-entry-bookkeeping |
-| FR-2 Idempotent transfers | Pending | #19, #22 | Planned Phase 4 | simulate-transfer (planned) | idempotency-keys |
-| FR-3 Concurrency | Pending | #17, #21 | test_database.py; concurrency tests planned | local-check | race-conditions, sqlite-acid-wal |
+| FR-2 Idempotent transfers | Issue pending | #19, #22; local `feat/idempotency` branch (unmerged) | `tests/test_idempotency.py` (local) | simulate-transfer (planned) | idempotency-keys |
+| FR-3 Concurrency | Issue pending | #17, #21; local `feat/idempotency` branch (unmerged) | `test_database.py`; concurrent identical request case in `tests/test_idempotency.py` (local) | local-check | race-conditions, sqlite-acid-wal |
 | FR-4 Audit trail | #12 (design) | #17, #21, #23, #30 | test_hash_chain.py | local-check | double-entry-bookkeeping |
 | FR-5 Reconciliation | Pending | #19 (design) | Planned Phase 5 | simulate-transfer (planned) | double-entry-bookkeeping |
 | FR-6 Authentication | Pending | #27, #31 | test_auth_wallets.py, test_auth_unit.py | local-check | authentication-sessions |

@@ -5,6 +5,7 @@
 - [[ai-session-phase3-backend-core]] - AI-assisted record of the Phase 3 backend core implementation commits (draft for human review).
 - [[ai-session-auth-wallets]] - Phase 3 auth, wallet and admin CLI implementation and prerequisite checks.
 - ⁠[[ai-session-phase4-posting-engine]] - Phase 4 atomic double-entry transaction posting engine and rollback verification.
+- [[ai-session-phase4-idempotency]] - Bharath's local Phase 4 idempotency helper implementation and verification.
 
 ## Areas
 

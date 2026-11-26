@@ -1,7 +1,8 @@
 import asyncio
 import json
 
-from ledger_api.main import internal_error
+from ledger_api.domain.errors import IdempotencyKeyReused
+from ledger_api.main import domain_error, internal_error
 
 
 def assert_error(response, status, code):
@@ -42,3 +43,15 @@ def test_internal_error_format():
     assert response.status_code == 500
     assert set(body) == {"code", "message"}
     assert body["code"] == "INTERNAL_ERROR"
+
+
+def test_idempotency_key_reuse_returns_conflict():
+    response = asyncio.run(
+        domain_error(None, IdempotencyKeyReused("Key was used for another request"))
+    )
+
+    body = json.loads(response.body)
+
+    assert response.status_code == 409
+    assert set(body) == {"code", "message"}
+    assert body["code"] == "IDEMPOTENCY_KEY_REUSED"

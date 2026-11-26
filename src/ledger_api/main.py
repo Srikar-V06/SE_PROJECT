@@ -52,8 +52,10 @@ async def domain_error(request, exc):
         "UNAUTHENTICATED": 401,
         "FORBIDDEN": 403,
         "NOT_FOUND": 404,
+        "CONFLICT": 409,
         "DUPLICATE_EMAIL": 409,
         "WALLET_EXISTS": 409,
+        "IDEMPOTENCY_KEY_REUSED": 409,
         "DB_BUSY": 503,
     }
     status = statuses.get(exc.code)
