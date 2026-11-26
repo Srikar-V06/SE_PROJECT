@@ -55,8 +55,9 @@ directly.
 
 - Automated tests and the full local-check workflow were not run in this
   session. Ruff, Python compilation, and the brain and skill validators passed.
-- Endpoint-level transfer and concurrency coverage, human review, a tracking
-  Issue and a reviewed PR remain outstanding.
+- Human review and a tracking Issue remain outstanding for the merged API
+  feature. Endpoint and concurrency coverage is recorded in
+  [[ai-session-phase4-api-verification]] on the local follow-up branch.
 
 ## Human review
 
