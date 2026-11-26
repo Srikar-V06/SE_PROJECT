@@ -135,13 +135,13 @@ reported 45 passing tests and 86% code coverage.
 Tests for production helpers that have not yet been implemented
 remain pending.
 
-## Phase 4 local idempotency verification
+## Phase 4 idempotency verification
 
-The unmerged `feat/idempotency` branch adds coverage for canonical request
+PR #40 adds coverage for canonical request
 hashing, successful response replay, mismatched-key conflicts, expiration,
 rollback on action failure, concurrent identical requests, key validation
 and the 24-hour minimum retention period. The branch also verifies that
 `IDEMPOTENCY_KEY_REUSED` uses the shared JSON error shape and HTTP 409.
 
-These results describe local branch verification only; they are not a merged
-CI result. Update this section with the PR and CI run after review and merge.
+Wallet funding API integration is local work pending review. Endpoint-level
+test coverage and verification remain outstanding for this change.
