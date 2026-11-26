@@ -33,6 +33,7 @@ branch, reviewed pull request and passing CI checks.
 | User and developer guides | Haneesh | docs/user-dev-docs |
 | Project commands | Haneesh | docs/agents-commands |
 | AI session records | Haneesh | docs/ai-sessions-phase3 |
+| CI coverage and PR validation | Pradyumna | ci/pr-checks |
 
 Existing database, domain and ledger foundation work is recorded in
 PRs #21, #22, #23 and #25. Verify the remaining acceptance criteria
@@ -75,6 +76,9 @@ Release milestone: v0.2.0.
 | SRS updates | Srikar | docs/srs-update |
 | Reconciliation ADR | Srikar | docs/adr-007 |
 | Browser tests | Srikar | test/ui-browser |
+| Isolated ledger tamper and mismatch tests | Pradyumna | test/tamper |
+| Test-only demo seed command | Haneesh | feat/demo-seed |
+| Performance and durability tests | Bharath | test/performance |
 
 Release milestone: v0.3.0.
 
@@ -99,6 +103,46 @@ Release milestone: v1.0.0.
 - API implementation precedes full UI integration.
 - Reconciliation requires the ledger and hash chain implementation.
 - Every functional requirement must have automated verification.
+
+## Additional requirements from Final Project Plan v2
+
+### Phase 3
+
+- Every API error uses the shared JSON error format.
+- Admin CLI supports both create-admin and grant-admin.
+- Unit tests cover CLI commands and JSON error responses.
+- CI reports coverage and runs secret, skill and brain checks.
+- Developer documentation includes HTTP and HTTPS run modes.
+
+### Phase 4
+
+- Merge transaction posting and the idempotency helper early.
+- Reversal and funding reuse these shared components.
+- Test idempotency expiry and concurrent identical requests.
+- Document permissions for every OpenAPI endpoint.
+- Add UI linting to CI.
+
+### Phase 5
+
+- Test reconciliation against isolated consistency failures.
+- Test UI layouts down to 360 pixels.
+- Test exact JavaScript monetary conversion.
+- Add the isolated demo seed command.
+- Verify parameterized SQL usage.
+- Test committed-data durability after restart.
+- Measure performance using a 10,000-entry dataset.
+- Record Windows, macOS and Linux verification.
+- Make all CI checks mandatory after the existing gaps are resolved.
+
+## Branching strategy
+
+- Create one GitHub Issue per task.
+- Create a dedicated branch from the latest main.
+- Open a pull request referencing the Issue.
+- Obtain human review and passing required CI checks.
+- Never push implementation changes directly to main.
+- Use small pull requests to reduce conflicts.
+- Record merged work in the changelog, brain and traceability matrix.
 
 ## Definition of Done
 
