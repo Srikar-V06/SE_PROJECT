@@ -110,3 +110,27 @@ reported as passed before being implemented and executed.
 - [SRS](SRS.pdf)
 - [[testing-strategy]]
 - [[github-actions]]
+
+## Additional verification required by Final Project Plan v2
+
+| Test area | Requirement |
+|---|---|
+| Financial request integer boundary validation | TQ-5, NFR-16 |
+| Idempotency expiry and replay | FR-2.8, NFR-18 |
+| Concurrent identical requests | FR-3.4 |
+| Ledger integrity detection | AC-4.3 |
+| Reconciliation mismatch detection | AC-5.2 |
+| Restart durability | NFR-7 |
+| JavaScript integer conversion | TQ-5 |
+| Responsive UI at 360 pixels | FR-7, NFR-22 |
+| Cross-platform verification | NFR-22 |
+| JSON error format | NFR-19 |
+| UI lint | NFR-21 |
+
+## Phase 3 test results
+
+The merged Phase 3 unit testing and CI work in PRs #29-32
+reported 45 passing tests and 86% code coverage.
+
+Tests for production helpers that have not yet been implemented
+remain pending.
