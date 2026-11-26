@@ -10,3 +10,4 @@ data/
 coverage.xml
 htmlcov/
 .ruff_cache/
+certs/

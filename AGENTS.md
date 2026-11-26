@@ -72,4 +72,71 @@ Resource notes use these sections: Summary, Key points, Relevance to this projec
 - Before opening a PR, run `python scripts/validate_brain.py` and `python scripts/validate_skills.py`.
 
 ## Project commands
-Added in Phase 3 (install, build, test, run server).
+
+Run from the repository root with Python 3.11 or later
+and an activated virtual environment.
+
+### Install dependencies
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### Build
+
+```bash
+python -m build
+```
+
+### Lint
+
+```bash
+python -m ruff check .
+```
+
+### Test
+
+```bash
+python -m pytest -q
+```
+
+### Coverage
+
+```bash
+python -m pytest --cov=ledger_api --cov=app --cov-report=term-missing
+```
+
+### Start local HTTP server
+
+```bash
+python -m uvicorn ledger_api.main:app --host 127.0.0.1 --port 8000
+```
+
+### Create administrator
+
+```bash
+python -m app.cli create-admin --email admin@example.org --name Administrator
+```
+
+### Grant administrator
+
+```bash
+python -m app.cli grant-admin --email existing-user@example.org
+```
+
+### Local verification
+
+```bash
+python scripts/local_check.py
+```
+
+### Validate project documentation
+
+```bash
+python scripts/validate_brain.py
+python scripts/validate_skills.py
+python scripts/audit_brain.py
+```
+
+For HTTPS setup, refer to docs/developer-guide.md.
+Generated certificates and private keys must never be committed.
