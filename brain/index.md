@@ -33,6 +33,7 @@
 - [[skill-eval-brain-refine]] - Brain refinement evaluation
 - [[skill-eval-local-check]] - Local verification evaluation
 - [[ai-session-phase3-unit-tests]] - Phase 3 unit tests, fixtures and CI coverage
+- [[ai-session-phase3-agents-commands]] - Phase 3 project commands, local HTTPS setup and local-check v2 improvements.
 ## Areas
 
 ## Resources

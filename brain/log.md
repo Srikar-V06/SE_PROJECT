@@ -41,3 +41,7 @@
 - 2026-11-26 | update | completed idempotency-keys research note | haneeshreddy9
 - 2026-11-26 | update | completed race-conditions research note | haneeshreddy9
 - 2026-11-26 | update | completed rest-api-design research note | haneeshreddy9
+- 2026-11-26 | update | AGENTS.md and README.md with Phase 3 installation, build, testing, server and admin CLI commands | haneeshreddy9
+- 2026-11-26 | add | local HTTPS setup instructions and certificate exclusions | haneeshreddy9
+- 2026-11-26 | update | scripts/local_check.py and local-check skill v2 with isolated temporary database verification | haneeshreddy9
+- 2026-11-26 | add and index | [[ai-session-phase3-agents-commands]] | recorded Phase 3 command documentation, HTTPS configuration, local-check improvements and AI-assisted verification | haneeshreddy9
