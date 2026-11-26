@@ -51,3 +51,4 @@
 -⁠  ⁠2026-11-26 | add | atomic double-entry posting engine and wallet balance updates | haneeshreddy9
 -⁠  ⁠2026-11-26 | add | posting engine tests covering funding, transfers, balance validation and rollback | haneeshreddy9
 -⁠  ⁠2026-11-26 | add and index | [[ai-session-phase4-posting-engine]] | recorded Phase 4 ledger posting implementation and verification | haneeshreddy9
+- 2026-11-26 | add and index | [[ai-session-phase4-idempotency]] | recorded Bharath's local Phase 4 idempotency implementation; GitHub Issue creation was denied by the integration | BharathVikas-T

@@ -25,6 +25,12 @@ class ConflictError(LedgerError):
     code = "CONFLICT"
 
 
+class IdempotencyKeyReused(ConflictError):
+    """A user reused a key for a different or already-recorded request."""
+
+    code = "IDEMPOTENCY_KEY_REUSED"
+
+
 class InsufficientFundsError(LedgerError):
     """A wallet does not have enough available balance for the operation."""
 
