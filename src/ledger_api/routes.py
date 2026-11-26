@@ -3,9 +3,9 @@
 from typing import Annotated, Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Request, Response
+from fastapi import APIRouter, Depends, Header, Request, Response
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from ledger_api.auth import (
     AuthService,
@@ -22,6 +22,7 @@ from ledger_api.domain.errors import NotFoundError
 from ledger_api.repositories.accounts import AccountRepository
 from ledger_api.repositories.sessions import SessionRepository
 from ledger_api.repositories.wallets import WalletRepository
+from ledger_api.services.wallet_operations import WalletOperations
 
 router = APIRouter()
 
@@ -51,6 +52,12 @@ def require_admin(caller: Caller) -> Principal:
     return caller
 
 
+Administrator = Annotated[Principal, Depends(require_admin)]
+IdempotencyKey = Annotated[
+    str, Header(alias="Idempotency-Key", min_length=1, max_length=128)
+]
+
+
 class WalletRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
     currency: Literal["INR", "USD"]
@@ -62,6 +69,33 @@ class Wallet(WalletRequest):
     user_id: str
     balance_minor: int
     created_at: str
+
+
+class FundingRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    amount_minor: int = Field(strict=True, ge=1, le=10**12)
+    description: str | None = None
+
+
+class LedgerEntryResponse(BaseModel):
+    entry_id: int
+    transaction_id: str
+    account_id: str
+    direction: Literal["DEBIT", "CREDIT"]
+    amount_minor: int
+    currency: Literal["INR", "USD"]
+    prev_hash: str
+    entry_hash: str
+    created_at: str
+
+
+class TransactionResponse(BaseModel):
+    transaction_id: str
+    type: Literal["FUNDING", "TRANSFER", "REVERSAL"]
+    reversal_of_transaction_id: str | None
+    description: str | None
+    created_at: str
+    entries: list[LedgerEntryResponse]
 
 
 @router.post("/auth/register", status_code=201)
@@ -120,3 +154,27 @@ def get_wallet(wallet_id: UUID, caller: Caller, auth: Service) -> Wallet:
         if row["user_id"] != caller.user.user_id and caller.user.role != "ADMIN":
             raise NotFoundError("wallet not found")
         return Wallet(**dict(row))
+
+
+@router.post(
+    "/wallets/{wallet_id}/fund", status_code=201, response_model=TransactionResponse
+)
+def fund_wallet(
+    wallet_id: UUID,
+    data: FundingRequest,
+    caller: Administrator,
+    key: IdempotencyKey,
+    auth: Service,
+    response: Response,
+) -> TransactionResponse:
+    result = WalletOperations(auth.db, auth.clock, auth.ids).fund(
+        actor_user_id=caller.user.user_id,
+        wallet_id=str(wallet_id),
+        key=key,
+        amount_minor=data.amount_minor,
+        description=data.description,
+    )
+    if result.replayed:
+        response.headers["Idempotent-Replayed"] = "true"
+    response.status_code = result.status_code
+    return result.body

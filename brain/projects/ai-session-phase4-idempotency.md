@@ -28,7 +28,7 @@ development-plan sequence after the shared posting engine was merged in PR #39.
 - Added per-user key lookup, exact response replay, mismatched-request conflict handling, expired-key replacement, and a minimum 24-hour retention period with a commit margin.
 - Mapped `IDEMPOTENCY_KEY_REUSED` to HTTP 409 using the shared JSON error format.
 - Added tests for canonical hashing, replay, conflict, expiry, rollback, concurrent identical requests, invalid keys and minimum retention.
-- Updated the test plan, traceability matrix, changelog, brain index and brain log for the unmerged local branch `feat/idempotency`.
+- Merged this implementation through PR #40. The test plan, traceability matrix and changelog have been updated to record the merge and the remaining API integration work.
 
 ## What worked
 
@@ -39,10 +39,10 @@ development-plan sequence after the shared posting engine was merged in PR #39.
 
 ## What failed / limitations
 
-- The connected GitHub integration rejected Issue creation with HTTP 403 (`Resource not accessible by integration`). No Issue or PR was created.
+- The connected GitHub integration rejected Issue creation with HTTP 403 (`Resource not accessible by integration`). PR #40 was later merged without a linked Issue; create or link the required tracking Issue if project policy permits.
 - The first test invocation could not import the package because the environment lacked the project installation and `argon2-cffi`; installing the repository-declared dependencies resolved this.
 - A combined no-isolation sdist-and-wheel build failed during its wheel stage; the wheel-only no-isolation build then passed. The default isolated build remains unverified because its build dependency download was blocked by network resolution.
-- The idempotency helper is not yet wired into funding or transfer endpoints; those are later Phase 4 tasks. The local branch needs a GitHub Issue number before its PR is opened.
+- At the time of this session, the helper was not wired into funding or transfer endpoints. Funding integration is recorded in [[ai-session-phase4-funding]].
 
 ## Review notes
 
