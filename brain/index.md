@@ -7,6 +7,7 @@
 - ⁠[[ai-session-phase4-posting-engine]] - Phase 4 atomic double-entry transaction posting engine and rollback verification.
 - [[ai-session-phase4-idempotency]] - Bharath's Phase 4 idempotency helper implementation and verification, merged in PR #40.
 - [[ai-session-phase4-funding]] - Phase 4 ADMIN-only wallet funding using the shared posting, idempotency and SQLite concurrency model.
+- [[ai-session-phase4-transfers]] - Phase 4 owner-authorized wallet transfers using shared posting, idempotency and SQLite concurrency protection.
 
 ## Areas
 

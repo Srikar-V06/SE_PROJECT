@@ -3,6 +3,11 @@
 from __future__ import annotations
 
 from ledger_api.auth import timestamp
+from ledger_api.domain.errors import (
+    CurrencyMismatchError,
+    NotFoundError,
+    ValidationError,
+)
 from ledger_api.providers.protocols import (
     ClockProvider,
     DatabaseProvider,
@@ -74,6 +79,65 @@ class WalletOperations:
             key=key,
             operation="wallet.fund",
             path_params={"wallet_id": wallet_id},
+            request_body=body,
+            action=action,
+        )
+
+    def transfer(
+        self,
+        *,
+        actor_user_id: str,
+        sender_wallet_id: str,
+        recipient_wallet_id: str,
+        key: str,
+        amount_minor: int,
+        description: str | None,
+    ) -> IdempotentResponse:
+        body = {
+            "sender_wallet_id": sender_wallet_id,
+            "recipient_wallet_id": recipient_wallet_id,
+            "amount_minor": amount_minor,
+            "description": description,
+        }
+
+        def action(conn):
+            wallets = WalletRepository(conn)
+            sender = wallets.get(sender_wallet_id)
+            if sender["user_id"] != actor_user_id:
+                raise NotFoundError("sender wallet not found")
+            recipient = wallets.get(recipient_wallet_id)
+            if sender_wallet_id == recipient_wallet_id:
+                raise ValidationError("sender and recipient wallets must differ")
+            if sender["currency"] != recipient["currency"]:
+                raise CurrencyMismatchError("wallet currencies must match")
+
+            transaction_id = self._ids.new_id()
+            created_at = timestamp(self._clock.now())
+            post_transaction(
+                conn,
+                transaction_id=transaction_id,
+                transaction_type="TRANSFER",
+                created_at=created_at,
+                description=description,
+                entries=(
+                    PostingEntry(
+                        sender["account_id"], "DEBIT", amount_minor, sender["currency"]
+                    ),
+                    PostingEntry(
+                        recipient["account_id"],
+                        "CREDIT",
+                        amount_minor,
+                        recipient["currency"],
+                    ),
+                ),
+            )
+            return self._created_response(conn, transaction_id)
+
+        return self._idempotency.execute(
+            user_id=actor_user_id,
+            key=key,
+            operation="wallet.transfer",
+            path_params={},
             request_body=body,
             action=action,
         )

@@ -56,6 +56,8 @@ async def domain_error(request, exc):
         "DUPLICATE_EMAIL": 409,
         "WALLET_EXISTS": 409,
         "IDEMPOTENCY_KEY_REUSED": 409,
+        "INSUFFICIENT_FUNDS": 422,
+        "CURRENCY_MISMATCH": 422,
         "DB_BUSY": 503,
     }
     status = statuses.get(exc.code)
