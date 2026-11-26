@@ -143,5 +143,6 @@ rollback on action failure, concurrent identical requests, key validation
 and the 24-hour minimum retention period. The branch also verifies that
 `IDEMPOTENCY_KEY_REUSED` uses the shared JSON error shape and HTTP 409.
 
-Wallet funding API integration is local work pending review. Endpoint-level
-test coverage and verification remain outstanding for this change.
+Wallet funding and transfer API integration are local work pending review.
+Endpoint-level test coverage and verification remain outstanding for these
+changes.

@@ -37,6 +37,12 @@ class InsufficientFundsError(LedgerError):
     code = "INSUFFICIENT_FUNDS"
 
 
+class CurrencyMismatchError(LedgerError):
+    """A financial operation attempted to combine different currencies."""
+
+    code = "CURRENCY_MISMATCH"
+
+
 class ValidationError(LedgerError, ValueError):
     """Input cannot be represented by the domain model."""
 

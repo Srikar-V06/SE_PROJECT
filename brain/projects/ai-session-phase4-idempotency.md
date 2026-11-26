@@ -42,7 +42,7 @@ development-plan sequence after the shared posting engine was merged in PR #39.
 - The connected GitHub integration rejected Issue creation with HTTP 403 (`Resource not accessible by integration`). PR #40 was later merged without a linked Issue; create or link the required tracking Issue if project policy permits.
 - The first test invocation could not import the package because the environment lacked the project installation and `argon2-cffi`; installing the repository-declared dependencies resolved this.
 - A combined no-isolation sdist-and-wheel build failed during its wheel stage; the wheel-only no-isolation build then passed. The default isolated build remains unverified because its build dependency download was blocked by network resolution.
-- At the time of this session, the helper was not wired into funding or transfer endpoints. Funding integration is recorded in [[ai-session-phase4-funding]].
+- At the time of this session, the helper was not wired into funding or transfer endpoints. The later integrations are recorded in [[ai-session-phase4-funding]] and [[ai-session-phase4-transfers]].
 
 ## Review notes
 

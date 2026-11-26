@@ -77,6 +77,14 @@ class FundingRequest(BaseModel):
     description: str | None = None
 
 
+class TransferRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    sender_wallet_id: UUID
+    recipient_wallet_id: UUID
+    amount_minor: int = Field(strict=True, ge=1, le=10**12)
+    description: str | None = None
+
+
 class LedgerEntryResponse(BaseModel):
     entry_id: int
     transaction_id: str
@@ -170,6 +178,28 @@ def fund_wallet(
     result = WalletOperations(auth.db, auth.clock, auth.ids).fund(
         actor_user_id=caller.user.user_id,
         wallet_id=str(wallet_id),
+        key=key,
+        amount_minor=data.amount_minor,
+        description=data.description,
+    )
+    if result.replayed:
+        response.headers["Idempotent-Replayed"] = "true"
+    response.status_code = result.status_code
+    return result.body
+
+
+@router.post("/transfers", status_code=201, response_model=TransactionResponse)
+def transfer_funds(
+    data: TransferRequest,
+    caller: Caller,
+    key: IdempotencyKey,
+    auth: Service,
+    response: Response,
+) -> TransactionResponse:
+    result = WalletOperations(auth.db, auth.clock, auth.ids).transfer(
+        actor_user_id=caller.user.user_id,
+        sender_wallet_id=str(data.sender_wallet_id),
+        recipient_wallet_id=str(data.recipient_wallet_id),
         key=key,
         amount_minor=data.amount_minor,
         description=data.description,
