@@ -7,7 +7,11 @@ A backend for a digital wallet with a tamper-evident, double-entry ledger.
 It supports idempotent transfers, safe concurrent balance updates, reversals and an administrative reconciliation check. Money is stored as integer minor units, and the database is SQLite.
 
 ## Status
-Stage 1 – Requirements (in progress).
+
+Phase 3 - Core Implementation I.
+
+Database foundation, authentication, wallet operations
+and unit testing have been introduced.
 
 ## Repository layout
 - `brain/`: team knowledge base (Obsidian vault, PARA folders)
@@ -60,3 +64,10 @@ Creation prompts for a password without echoing it. Grant promotes an
 existing account. Public registration creates a USER. Login returns a bearer
 token valid for 30 minutes. Send it in the Authorization header as
 `Bearer <token>`. Logout revokes that session.
+
+## Documentation
+
+- [User Guide](docs/user-guide.md)
+- [Developer Guide](docs/developer-guide.md)
+- [API Specification](docs/openapi.yaml)
+- [Test Plan](docs/test-plan.md)

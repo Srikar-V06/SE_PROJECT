@@ -42,6 +42,10 @@ Stop the server started by the script after the check.
 - Never expose passwords or bearer tokens.
 - Do not change tests to hide failures.
 - Report failures honestly.
+- The server verification step uses a fresh temporary SQLite database.
+- The verification script must not use the normal application database.
+- Temporary verification data is removed after the server stops.
+- Run the complete current pytest suite.
 
 ## Related Requirements
 
