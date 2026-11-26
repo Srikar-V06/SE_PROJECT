@@ -54,6 +54,14 @@ class WalletRepository:
             (user_id, currency),
         ).fetchone()
 
+    def get_by_account(self, account_id: str) -> sqlite3.Row | None:
+        return self._connection.execute(
+            "SELECT wallet_id, user_id, account_id, currency, "
+            "balance_minor, created_at FROM wallets "
+            "WHERE account_id = ?",
+            (account_id,),
+        ).fetchone()
+
     def apply_delta(self, wallet_id: str, delta_minor: int) -> int:
         """Atomically adjust a balance, rejecting any result below zero."""
         if delta_minor == 0:

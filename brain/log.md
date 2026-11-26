@@ -45,6 +45,9 @@
 - 2026-11-26 | add | local HTTPS setup instructions and certificate exclusions | haneeshreddy9
 - 2026-11-26 | update | scripts/local_check.py and local-check skill v2 with isolated temporary database verification | haneeshreddy9
 - 2026-11-26 | add and index | [[ai-session-phase3-agents-commands]] | recorded Phase 3 command documentation, HTTPS configuration, local-check improvements and AI-assisted verification | haneeshreddy9
-•⁠  ⁠2026-11-26 | evaluate | [[skill-eval-local-check]] | recorded Phase 3 local-check v2 verification results | haneeshreddy9
-•⁠  ⁠2026-11-26 | update | docs/traceability-matrix.md | linked Phase 3 documentation, HTTPS and local-check implementation to PR #37 | haneeshreddy9
-•⁠  ⁠2026-11-26 | update | [[ai-session-phase3-agents-commands]] | recorded merged PR and follow-up verification | haneeshreddy9
+-⁠  ⁠2026-11-26 | evaluate | [[skill-eval-local-check]] | recorded Phase 3 local-check v2 verification results | haneeshreddy9
+-⁠  ⁠2026-11-26 | update | docs/traceability-matrix.md | linked Phase 3 documentation, HTTPS and local-check implementation to PR #37 | haneeshreddy9
+-⁠  ⁠2026-11-26 | update | [[ai-session-phase3-agents-commands]] | recorded merged PR and follow-up verification | haneeshreddy9
+-⁠  ⁠2026-11-26 | add | atomic double-entry posting engine and wallet balance updates | haneeshreddy9
+-⁠  ⁠2026-11-26 | add | posting engine tests covering funding, transfers, balance validation and rollback | haneeshreddy9
+-⁠  ⁠2026-11-26 | add and index | [[ai-session-phase4-posting-engine]] | recorded Phase 4 ledger posting implementation and verification | haneeshreddy9
