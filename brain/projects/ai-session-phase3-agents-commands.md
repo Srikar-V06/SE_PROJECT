@@ -91,3 +91,17 @@ docs/agents-commands
 The Phase 3 project commands, HTTPS documentation and
 local-check improvements have been prepared for verification
 and pull request review.
+
+## Follow-up verification
+
+PR #37 was successfully merged into main.
+
+The Phase 3 local-check evaluation was updated in
+[[skill-eval-local-check]].
+
+The traceability matrix was updated to reflect the
+Phase 3 documentation, HTTPS configuration and
+local-check v2 implementation.
+
+GitHub CI reported 45 passing tests, 86% code coverage
+and successful completion of all seven CI jobs.
