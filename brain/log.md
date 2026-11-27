@@ -60,3 +60,5 @@
 -⁠  ⁠2026-11-27 | add and index | [[ai-session-phase4-hash-chain]] | recorded hash-chain integration and verification tests | haneeshreddy9
 -⁠  ⁠2026-11-27 | add | ADMIN transaction reversal endpoint and compensating ledger postings | haneeshreddy9
 -⁠  ⁠2026-11-27 | add and index | [[ai-session-phase4-reversals]] | recorded reversal implementation and verification | haneeshreddy9
+-⁠  ⁠2026-11-27 | add | authorized transaction details and paginated ledger read endpoints | haneeshreddy9
+-⁠  ⁠2026-11-27 | add and index | [[ai-session-phase4-ledger-reads]] | recorded ledger read implementation and verification | haneeshreddy9

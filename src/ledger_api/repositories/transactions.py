@@ -54,3 +54,20 @@ class TransactionRepository:
             "WHERE reversal_of_transaction_id = ?",
             (transaction_id,),
         ).fetchone()
+    def is_participant(
+        self,
+        transaction_id: str,
+        user_id: str,
+    ) -> bool:
+        row = self._connection.execute(
+            "SELECT 1 FROM ledger_entries AS entry "
+            "JOIN wallets AS wallet "
+            "ON wallet.account_id = entry.account_id "
+            "WHERE entry.transaction_id = ? "
+            "AND wallet.user_id = ? "
+            "LIMIT 1",
+            (transaction_id, user_id),
+        ).fetchone()
+
+        return row is not None
+
