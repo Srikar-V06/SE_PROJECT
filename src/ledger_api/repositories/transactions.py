@@ -44,3 +44,13 @@ class TransactionRepository:
         if row is None:
             raise NotFoundError("transaction not found")
         return row
+    
+    def get_reversal(
+        self, transaction_id: str
+    ) -> sqlite3.Row | None:
+        return self._connection.execute(
+            "SELECT transaction_id, type, reversal_of_transaction_id, "
+            "description, created_at FROM transactions "
+            "WHERE reversal_of_transaction_id = ?",
+            (transaction_id,),
+        ).fetchone()

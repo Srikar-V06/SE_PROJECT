@@ -22,6 +22,7 @@ from ledger_api.domain.errors import NotFoundError
 from ledger_api.repositories.accounts import AccountRepository
 from ledger_api.repositories.sessions import SessionRepository
 from ledger_api.repositories.wallets import WalletRepository
+from ledger_api.services.reversals import ReversalService
 from ledger_api.services.wallet_operations import WalletOperations
 
 router = APIRouter()
@@ -84,6 +85,10 @@ class TransferRequest(BaseModel):
     amount_minor: int = Field(strict=True, ge=1, le=10**12)
     description: str | None = None
 
+class ReversalRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    description: str | None = None
 
 class LedgerEntryResponse(BaseModel):
     entry_id: int
@@ -206,5 +211,36 @@ def transfer_funds(
     )
     if result.replayed:
         response.headers["Idempotent-Replayed"] = "true"
+    response.status_code = result.status_code
+    return result.body
+
+
+@router.post(
+    "/transactions/{transaction_id}/reverse",
+    status_code=201,
+    response_model=TransactionResponse,
+)
+def reverse_transaction(
+    transaction_id: UUID,
+    caller: Administrator,
+    key: IdempotencyKey,
+    auth: Service,
+    response: Response,
+    data: ReversalRequest | None = None,
+) -> TransactionResponse:
+    result = ReversalService(
+        auth.db,
+        auth.clock,
+        auth.ids,
+    ).reverse(
+        actor_user_id=caller.user.user_id,
+        transaction_id=str(transaction_id),
+        key=key,
+        description=data.description if data is not None else None,
+    )
+
+    if result.replayed:
+        response.headers["Idempotent-Replayed"] = "true"
+
     response.status_code = result.status_code
     return result.body

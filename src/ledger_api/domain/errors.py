@@ -47,3 +47,14 @@ class ValidationError(LedgerError, ValueError):
     """Input cannot be represented by the domain model."""
 
     code = "VALIDATION_ERROR"
+
+class AlreadyReversedError(ConflictError):
+    code = "ALREADY_REVERSED"
+
+
+class ReversalOfReversalError(ConflictError):
+    code = "REVERSAL_OF_REVERSAL"
+
+
+class ReversalOverdrawError(InsufficientFundsError):
+    code = "REVERSAL_OVERDRAW"
