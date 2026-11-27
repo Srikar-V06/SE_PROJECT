@@ -1,0 +1,306 @@
+:root {
+    color-scheme: light;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+
+    --background: #f3f6fb;
+    --surface: #ffffff;
+    --primary: #2455c3;
+    --primary-dark: #183e95;
+    --text: #192338;
+    --muted: #526078;
+    --border: #dce3ee;
+    --danger: #a51d2d;
+    --success: #17643a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+body {
+    margin: 0;
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 5%;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.brand-icon {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    background: var(--primary);
+    color: white;
+    border-radius: 10px;
+}
+
+a {
+    color: var(--primary);
+}
+
+.container {
+    width: min(1100px, 92%);
+    margin: 40px auto;
+    min-height: 70vh;
+}
+
+.auth-card {
+    max-width: 440px;
+    margin: 40px auto;
+    padding: 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 10px 32px #1923380d;
+}
+
+.eyebrow {
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+h1,
+h2,
+p {
+    margin-top: 0;
+}
+
+h1 {
+    font-size: 28px;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+
+h2 {
+    font-size: 20px;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+input,
+select {
+    width: 100%;
+    min-width: 0;
+    padding: 12px;
+    font: inherit;
+    color: var(--text);
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+button {
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--primary);
+    color: white;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+form button {
+    margin-top: 8px;
+}
+
+button:hover:not(:disabled) {
+    background: var(--primary-dark);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 3px solid #6288df;
+    outline-offset: 3px;
+}
+
+.secondary {
+    color: var(--primary);
+    background: #eaf0ff;
+}
+
+.secondary:hover:not(:disabled) {
+    color: white;
+}
+
+.text-button {
+    background: transparent;
+    color: var(--primary);
+    padding: 0;
+    text-decoration: underline;
+}
+
+.text-button:hover:not(:disabled) {
+    background: transparent;
+    color: var(--primary-dark);
+}
+
+.switch-view {
+    text-align: center;
+    margin-top: 24px;
+    margin-bottom: 0;
+}
+
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.badge {
+    display: inline-block;
+    background: #e5edff;
+    color: var(--primary-dark);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+}
+
+.panel {
+    min-width: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+}
+
+.panel-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.wallet-list {
+    display: grid;
+    gap: 16px;
+}
+
+.wallet-card {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    border-radius: 10px;
+}
+
+.wallet-balance {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    overflow-wrap: anywhere;
+}
+
+.wallet-id {
+    color: var(--muted);
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.planned-panel {
+    margin-top: 24px;
+}
+
+#status-message {
+    overflow-wrap: anywhere;
+}
+
+#status-message.error {
+    padding: 12px;
+    color: var(--danger);
+    background: #fff0f0;
+    border-radius: 8px;
+}
+
+#status-message.success {
+    padding: 12px;
+    color: var(--success);
+    background: #ecf8ef;
+    border-radius: 8px;
+}
+
+footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 24px;
+}
+
+@media (max-width: 700px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        flex-wrap: wrap;
+    }
+
+    .container {
+        margin: 20px auto;
+    }
+
+    .auth-card,
+    .panel {
+        padding: 20px;
+    }
+
+    .dashboard-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

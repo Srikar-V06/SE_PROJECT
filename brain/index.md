@@ -10,6 +10,7 @@
 - [[ai-session-phase4-funding]] - Phase 4 ADMIN-only wallet funding using the shared posting, idempotency and SQLite concurrency model.
 - [[ai-session-phase4-transfers]] - Phase 4 owner-authorized wallet transfers using shared posting, idempotency and SQLite concurrency protection.
 - [[ai-session-phase4-api-verification]] - Phase 4 funding and transfer API tests, concurrent replay verification and validation-error fix.
+- [[ai-session-phase4-ui-shell]] - Browser UI shell, in-memory sessions and frontend linting.
 
 ## Areas
 
