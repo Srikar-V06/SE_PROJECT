@@ -21,7 +21,7 @@ package-dir = {"" = "src"}
 where = ["src"]
 
 [tool.setuptools.package-data]
-ledger_api = ["db/migrations/*.sql", "static/*.html"]
+ledger_api = ["db/migrations/*.sql", "static/*.html", "static/*.css", "static/*.js"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

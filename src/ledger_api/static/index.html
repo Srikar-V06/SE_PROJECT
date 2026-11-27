@@ -1,4 +1,180 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Digital Wallet</title></head><body><main><h1>Digital Wallet</h1>
-<a href="/docs">Explore the wallet API</a></main></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Wallet | Code Vibers</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script type="module" src="./app.js"></script>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <span class="brand-icon">W</span>
+            <span>Digital Wallet</span>
+        </div>
+
+        <a href="/docs">API documentation</a>
+    </header>
+
+    <main class="container">
+
+        <p id="status-message" role="status" aria-live="polite"></p>
+
+        <section id="login-view" class="auth-card">
+            <p class="eyebrow">WELCOME BACK</p>
+            <h1>Sign in to your wallet</h1>
+            <p class="muted">Manage your digital wallets securely.</p>
+
+            <form id="login-form" method="post">
+                <label for="login-email">Email address</label>
+                <input
+                    id="login-email"
+                    type="email"
+                    autocomplete="email"
+                    required
+                >
+
+                <label for="login-password">Password</label>
+                <input
+                    id="login-password"
+                    type="password"
+                    autocomplete="current-password"
+                    minlength="12"
+                    maxlength="128"
+                    required
+                >
+
+                <button type="submit">Sign in</button>
+            </form>
+
+            <p class="switch-view">
+                New to Digital Wallet?
+                <button type="button" id="show-register" class="text-button">
+                    Create account
+                </button>
+            </p>
+        </section>
+
+        <section id="register-view" class="auth-card" hidden>
+            <p class="eyebrow">GET STARTED</p>
+            <h1>Create your account</h1>
+            <p class="muted">Set up your digital wallet profile.</p>
+
+            <form id="register-form" method="post">
+                <label for="register-name">Full name</label>
+                <input
+                    id="register-name"
+                    type="text"
+                    autocomplete="name"
+                    maxlength="100"
+                    required
+                >
+
+                <label for="register-email">Email address</label>
+                <input
+                    id="register-email"
+                    type="email"
+                    autocomplete="email"
+                    required
+                >
+
+                <label for="register-password">Password</label>
+                <input
+                    id="register-password"
+                    type="password"
+                    autocomplete="new-password"
+                    minlength="12"
+                    maxlength="128"
+                    required
+                >
+
+                <small class="muted">
+                    Use a password containing 12 to 128 characters.
+                </small>
+
+                <button type="submit">Create account</button>
+            </form>
+
+            <p class="switch-view">
+                Already registered?
+                <button type="button" id="show-login" class="text-button">
+                    Sign in
+                </button>
+            </p>
+        </section>
+
+        <section id="dashboard-view" hidden>
+            <div class="dashboard-header">
+                <div>
+                    <p class="eyebrow">YOUR ACCOUNT</p>
+                    <h1 id="welcome-name"></h1>
+                    <span id="user-role" class="badge"></span>
+                </div>
+
+                <button id="logout-button" class="secondary" type="button">
+                    Sign out
+                </button>
+            </div>
+
+            <div class="dashboard-grid">
+                <section class="panel">
+                    <div class="panel-heading">
+                        <h2>Your wallets</h2>
+
+                        <button
+                            id="refresh-wallets"
+                            type="button"
+                            class="secondary"
+                        >
+                            Refresh
+                        </button>
+                    </div>
+
+                    <p id="empty-wallets" class="muted">
+                        No wallets found. Create your first wallet.
+                    </p>
+
+                    <div id="wallet-list" class="wallet-list"></div>
+                </section>
+
+                <section class="panel">
+                    <h2>Create wallet</h2>
+                    <p class="muted">
+                        Choose a currency for your new wallet.
+                    </p>
+
+                    <form id="wallet-form" method="post">
+                        <label for="wallet-currency">Currency</label>
+
+                        <select id="wallet-currency" required>
+                            <option value="INR">INR — Indian Rupee</option>
+                            <option value="USD">USD — US Dollar</option>
+                        </select>
+
+                        <button type="submit">Create wallet</button>
+                    </form>
+                </section>
+            </div>
+
+            <section class="panel planned-panel">
+                <h2>Coming in the next phase</h2>
+                <p class="muted">
+                    Transfers, transaction history and administrator
+                    operations will be added in Phase 5.
+                </p>
+            </section>
+        </section>
+
+        <noscript>
+            JavaScript is required to use this wallet interface.
+        </noscript>
+
+    </main>
+
+    <footer>
+        Financial Ledger &amp; Digital Wallet — Team Code Vibers
+    </footer>
+</body>
+</html>

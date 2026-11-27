@@ -63,3 +63,6 @@
 -⁠  ⁠2026-11-27 | add | authorized transaction details and paginated ledger read endpoints | haneeshreddy9
 -⁠  ⁠2026-11-27 | add and index | [[ai-session-phase4-ledger-reads]] | recorded ledger read implementation and verification | haneeshreddy9
 - 2026-11-27 | add and index | [[ai-session-phase4-integration]] | recorded integration tests and regression evidence | Srikar-V06
+- 2026-11-28 | add | Phase 4 browser UI shell and wallet dashboard | Vishwa-Pradyumna
+- 2026-11-28 | add | ESLint, frontend asset tests and UI lint CI integration | Vishwa-Pradyumna
+- 2026-11-28 | add and index | [[ai-session-phase4-ui-shell]] | recorded UI implementation and verification | Vishwa-Pradyumna
