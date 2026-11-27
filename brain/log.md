@@ -56,3 +56,5 @@
 - 2026-11-26 | update | [[ai-session-phase4-idempotency]], docs/test-plan.md, docs/traceability-matrix.md and CHANGELOG.md | recorded merged PR #40 and corrected stale local/unmerged status | BharathVikas-T
 - 2026-11-26 | add and index | [[ai-session-phase4-transfers]] | recorded local Phase 4 transfer integration and its use of merged concurrency protections | BharathVikas-T
 - 2026-11-26 | add and index | [[ai-session-phase4-api-verification]] | recorded API integration results, concurrent retry coverage and HTTP validation error fix | BharathVikas-T
+-⁠  ⁠2026-11-27 | add and index | [[hash-chain-integrity]] | documented ledger hash-chain integrity and verification | haneeshreddy9
+-⁠  ⁠2026-11-27 | add and index | [[ai-session-phase4-hash-chain]] | recorded hash-chain integration and verification tests | haneeshreddy9

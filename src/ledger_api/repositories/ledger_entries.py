@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-import hmac
 import sqlite3
 
 from ledger_api.domain.errors import ValidationError
 from ledger_api.ledger.hash_chain import GENESIS_HASH, compute_entry_hash
-from ledger_api.ledger.verification import VerificationReport
+from ledger_api.ledger.verification import VerificationReport, verify_entries
 
 
 class LedgerEntryRepository:
@@ -81,34 +80,12 @@ class LedgerEntryRepository:
         )
 
     def verify_chain(self) -> VerificationReport:
-        """Recompute links in entry order and return the first integrity failure."""
+        """Verify ledger entries in ascending entry ID order."""
+
         rows = self._connection.execute(
-            "SELECT entry_id, transaction_id, account_id, direction, amount_minor, "
-            "currency, prev_hash, entry_hash, created_at FROM ledger_entries "
-            "ORDER BY entry_id ASC"
+            "SELECT entry_id, transaction_id, account_id, direction, "
+            "amount_minor, currency, prev_hash, entry_hash, created_at "
+            "FROM ledger_entries ORDER BY entry_id ASC"
         )
-        expected_prev = GENESIS_HASH
-        checked = 0
-        for row in rows:
-            entry_id = int(row["entry_id"])
-            checked += 1
-            if not hmac.compare_digest(row["prev_hash"], expected_prev):
-                return VerificationReport(
-                    "FAIL", checked, entry_id, "previous hash does not match"
-                )
-            expected_hash = compute_entry_hash(
-                row["prev_hash"],
-                row["transaction_id"],
-                row["account_id"],
-                row["direction"],
-                row["amount_minor"],
-                row["currency"],
-                row["created_at"],
-                entry_id,
-            )
-            if not hmac.compare_digest(row["entry_hash"], expected_hash):
-                return VerificationReport(
-                    "FAIL", checked, entry_id, "entry hash does not match stored fields"
-                )
-            expected_prev = row["entry_hash"]
-        return VerificationReport("PASS", checked)
+
+        return verify_entries(rows)
