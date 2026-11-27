@@ -11,10 +11,11 @@ or linked to its GitHub Issue.
 | FR-1.5 Admin wallet funding | Issue pending | #41 | `tests/test_wallet_operations_api.py` | local-check | double-entry-bookkeeping, idempotency-keys |
 | FR-2 Idempotent transfers | Issue pending | #19, #22, #40, #42 | `tests/test_idempotency.py`, `tests/test_wallet_operations_api.py` | simulate-transfer (planned) | idempotency-keys |
 | FR-3 Concurrency | Issue pending | #17, #21, #39, #40, #42 provide SQLite write serialization and idempotent replay | `test_database.py`, `tests/test_idempotency.py`, concurrent API retry in `tests/test_wallet_operations_api.py` | local-check | race-conditions, sqlite-acid-wal |
-| FR-4 Audit trail | #12 (design) | #17, #21, #23, #30 | test_hash_chain.py | local-check | double-entry-bookkeeping |
+| FR-4 Audit trail | #12 (design) | #17, #21, #23, #30, #39, #44, #45, #46 | test_hash_chain.py, test_post_transaction.py, test_reversals.py, test_ledger_reads.py | local-check | double-entry-bookkeeping, hash-chain-integrity |
 | FR-5 Reconciliation | Pending | #19 (design) | Planned Phase 5 | simulate-transfer (planned) | double-entry-bookkeeping |
 | FR-6 Authentication | Pending | #27, #31 | test_auth_wallets.py, test_auth_unit.py | local-check | authentication-sessions |
-| FR-7 Web UI | Pending | #28 | Browser tests planned | local-check | authentication-sessions |
+| FR-7.1, FR-7.2, FR-7.7 Web UI shell | Pending | #28, #UI-PR | test_ui_shell.py; manual browser verification | local-check | ai-session-phase4-ui-shell |
+| FR-7.3 to FR-7.6 | Pending | Planned Phase 5 | Browser and monetary conversion tests planned | local-check | authentication-sessions |
 | NFR-1 to NFR-3 | Pending | Planned | Performance tests planned | simulate-transfer (planned) | race-conditions |
 | NFR-4 to NFR-8 | Pending | #21, #23 | test_database.py; further tests planned | local-check | sqlite-acid-wal |
 | NFR-9 to NFR-14 | Pending | #27, #31 | test_auth_unit.py, test_auth_wallets.py | local-check | authentication-sessions |

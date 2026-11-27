@@ -72,3 +72,20 @@ C-6, C-7, A-5, FR-6, FR-7.7, NFR-14, NFR-15, TBD-9.
 ## Brain notes cited
 
 [[authentication-sessions]]
+
+## Phase 4 implementation
+
+The static application is implemented in
+src/ledger_api/static/.
+
+The authentication token is held in JavaScript memory.
+
+The browser uses same-origin REST requests, clears session
+state after logout and HTTP 401 responses, and requires
+authentication again after page reload.
+
+User-provided content is rendered using textContent.
+
+Frontend linting is included in the CI lint job.
+
+Related requirements: FR-7.1, FR-7.2, FR-7.7, NFR-14, NFR-21.

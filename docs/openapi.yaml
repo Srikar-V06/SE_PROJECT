@@ -2,8 +2,12 @@ openapi: 3.1.0
 
 info:
   title: Financial Ledger and Digital Wallet API
-  version: 0.1.0
-  description: Phase 2 API design draft based on SRS v2.0
+  version: 0.2.0
+  description: >
+    Phase 4 API contract aligned with SRS v2.0.
+    Authentication, wallet management, funding, transfers,
+    reversals and ledger reads are implemented.
+    Administrative reconciliation remains planned for Phase 5.
 
 security:
   - bearerAuth: []
@@ -13,6 +17,7 @@ paths:
   /health:
     get:
       summary: Check application health
+      description: Public health check. No authentication required.
       security: []
       responses:
         '200':
@@ -24,9 +29,10 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 
-  /app:
+  /app/:
     get:
       summary: Serve the static wallet application
+      description: Public browser interface. /app redirects to /app/.
       security: []
       responses:
         '200':
@@ -41,7 +47,7 @@ paths:
   /auth/register:
     post:
       summary: Register a new USER account
-      description: FR-6.1
+      description: FR-6.1. Public registration creates a USER account only.
       security: []
       requestBody:
         required: true
@@ -64,13 +70,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        '503':
+          $ref: '#/components/responses/DatabaseBusy'
         '500':
           $ref: '#/components/responses/InternalError'
 
   /auth/login:
     post:
       summary: Authenticate user and create session
-      description: FR-6.2
+      description: >
+        FR-6.2. Public authentication.
+        Issues an opaque bearer token valid for 30 minutes.
       security: []
       requestBody:
         required: true
@@ -81,6 +91,12 @@ paths:
       responses:
         '200':
           description: Login successful
+          headers:
+            Cache-Control:
+              description: Prevents caching of the login response
+              schema:
+                type: string
+                const: no-store
           content:
             application/json:
               schema:
@@ -89,13 +105,17 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '503':
+          $ref: '#/components/responses/DatabaseBusy'
         '500':
           $ref: '#/components/responses/InternalError'
 
   /auth/logout:
     post:
       summary: Revoke current session
-      description: FR-6.5
+      description: >
+        FR-6.5. Authenticated USER or ADMIN.
+        Revokes the caller's current session.
       responses:
         '200':
           description: Session revoked
@@ -105,13 +125,17 @@ paths:
                 $ref: '#/components/schemas/MessageResponse'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '503':
+          $ref: '#/components/responses/DatabaseBusy'
         '500':
           $ref: '#/components/responses/InternalError'
 
   /auth/me:
     get:
       summary: Get authenticated user details
-      description: FR-6.5
+      description: >
+        FR-6.5. Authenticated USER or ADMIN.
+        Returns the caller's identity and current role.
       responses:
         '200':
           description: Current user
@@ -127,7 +151,10 @@ paths:
   /users/{user_id}/wallets:
     post:
       summary: Create a wallet
-      description: FR-1.2. The path user must be the authenticated caller.
+      description: >
+        FR-1.2. Authenticated USER or ADMIN.
+        The path user must be the authenticated caller.
+        Each user may create one wallet per supported currency.
       parameters:
         - $ref: '#/components/parameters/UserId'
       requestBody:
@@ -155,13 +182,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        '503':
+          $ref: '#/components/responses/DatabaseBusy'
         '500':
           $ref: '#/components/responses/InternalError'
 
   /users/me/wallets:
     get:
       summary: List wallets owned by caller
-      description: FR-1.4
+      description: >
+        FR-1.4. Authenticated USER or ADMIN.
+        Returns only wallets owned by the caller.
       responses:
         '200':
           description: List of owned wallets
@@ -179,7 +210,10 @@ paths:
   /wallets/{wallet_id}:
     get:
       summary: Get a wallet and its balance
-      description: FR-1.4. Accessible to the owner or an ADMIN.
+      description: >
+        FR-1.4. Wallet owner or ADMIN only.
+        Returns 404 when the wallet does not exist
+        or is not visible to the caller.
       parameters:
         - $ref: '#/components/parameters/WalletId'
       responses:
@@ -201,7 +235,10 @@ paths:
   /wallets/{wallet_id}/fund:
     post:
       summary: Fund a wallet from system treasury
-      description: FR-1.5. ADMIN only.
+      description: >
+        FR-1.5. ADMIN only.
+        Requires an Idempotency-Key header.
+        Posts a balanced funding transaction atomically.
       parameters:
         - $ref: '#/components/parameters/WalletId'
         - $ref: '#/components/parameters/IdempotencyKey'
@@ -232,7 +269,11 @@ paths:
   /transfers:
     post:
       summary: Transfer funds between wallets
-      description: FR-2 and FR-3. The caller must own the sender wallet.
+      description: >
+        FR-2 and FR-3. Authenticated USER or ADMIN.
+        The caller must own the sender wallet.
+        Requires an Idempotency-Key header.
+        Both wallets must use the same currency.
       parameters:
         - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
@@ -266,7 +307,11 @@ paths:
   /transactions/{transaction_id}/reverse:
     post:
       summary: Reverse an existing transaction
-      description: FR-4.3 and FR-4.4. ADMIN only.
+      description: >
+        FR-4.3 and FR-4.4. ADMIN only.
+        Requires an Idempotency-Key header.
+        Creates a compensating transaction with opposite
+        ledger entries without modifying the original.
       parameters:
         - $ref: '#/components/parameters/TransactionId'
         - $ref: '#/components/parameters/IdempotencyKey'
@@ -275,7 +320,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReversalRequest'
+              anyOf:
+                - $ref: '#/components/schemas/ReversalRequest'
+                - type: 'null'
       responses:
         '201':
           $ref: '#/components/responses/TransactionCreated'
@@ -309,7 +356,9 @@ paths:
   /transactions/{transaction_id}:
     get:
       summary: Get transaction details and ledger entries
-      description: FR-4.7. Participant or ADMIN only.
+      description: >
+        FR-4.7. Transaction participant or ADMIN only.
+        Returns the transaction and all associated ledger entries.
       parameters:
         - $ref: '#/components/parameters/TransactionId'
       responses:
@@ -333,15 +382,17 @@ paths:
       summary: Retrieve paginated ledger entries
       description: >
         FR-4.6. USER accounts must provide an owned wallet_id.
-        ADMIN accounts may query globally. Entries are ordered
-        by ascending entry_id.
+        ADMIN accounts may query globally.
+        Entries are ordered by ascending entry_id.
       parameters:
         - name: wallet_id
           in: query
+          description: Required for USER accounts
           schema:
             $ref: '#/components/schemas/UUID'
         - name: transaction_id
           in: query
+          description: Optional transaction filter
           schema:
             $ref: '#/components/schemas/UUID'
         - name: limit
@@ -356,6 +407,7 @@ paths:
           schema:
             type: integer
             minimum: 0
+            maximum: 9223372036854775807
             default: 0
       responses:
         '200':
@@ -376,9 +428,12 @@ paths:
   /admin/reconciliation:
     get:
       summary: Reconcile ledger and wallet balances
+      x-implementation-status: planned
       description: >
-        FR-5. ADMIN only. Read-only check using one
-        consistent database snapshot.
+        FR-5. ADMIN only.
+        Read-only check using one consistent database snapshot.
+        This endpoint is planned for Phase 5 and is not
+        implemented in Phase 4.
       responses:
         '200':
           description: Reconciliation report
@@ -428,7 +483,10 @@ components:
       name: Idempotency-Key
       in: header
       required: true
-      description: Unique per authenticated user, retained for at least 24 hours.
+      description: >
+        Unique per authenticated user and retained for at least
+        24 hours. Reuse the same key and identical request
+        when retrying an uncertain operation.
       schema:
         type: string
         minLength: 1
@@ -445,6 +503,12 @@ components:
 
     Unauthorized:
       description: UNAUTHENTICATED
+      headers:
+        WWW-Authenticate:
+          description: Bearer authentication required
+          schema:
+            type: string
+            const: Bearer
       content:
         application/json:
           schema:
@@ -538,6 +602,7 @@ components:
             - NOT_FOUND
             - DUPLICATE_EMAIL
             - WALLET_EXISTS
+            - CONFLICT
             - IDEMPOTENCY_KEY_REUSED
             - ALREADY_REVERSED
             - REVERSAL_OF_REVERSAL
@@ -545,6 +610,8 @@ components:
             - CURRENCY_MISMATCH
             - REVERSAL_OVERDRAW
             - DB_BUSY
+            - METHOD_NOT_ALLOWED
+            - HTTP_ERROR
             - INTERNAL_ERROR
         message:
           type: string
@@ -602,6 +669,7 @@ components:
       properties:
         token:
           type: string
+          description: Opaque bearer token
         expires_in:
           type: integer
           const: 1800
@@ -610,7 +678,7 @@ components:
 
     User:
       type: object
-      required: [user_id, name, email, role]
+      required: [user_id, name, email, role, created_at]
       properties:
         user_id:
           $ref: '#/components/schemas/UUID'
@@ -645,6 +713,7 @@ components:
         balance_minor:
           type: integer
           minimum: 0
+          maximum: 9223372036854775807
         created_at:
           $ref: '#/components/schemas/Timestamp'
 
@@ -656,7 +725,7 @@ components:
         amount_minor:
           $ref: '#/components/schemas/AmountMinor'
         description:
-          type: string
+          type: [string, 'null']
 
     TransferRequest:
       type: object
@@ -670,14 +739,14 @@ components:
         amount_minor:
           $ref: '#/components/schemas/AmountMinor'
         description:
-          type: string
+          type: [string, 'null']
 
     ReversalRequest:
       type: object
       additionalProperties: false
       properties:
         description:
-          type: string
+          type: [string, 'null']
 
     Transaction:
       type: object
@@ -726,7 +795,12 @@ components:
         transaction_id:
           $ref: '#/components/schemas/UUID'
         account_id:
-          $ref: '#/components/schemas/UUID'
+          description: Wallet account UUID or system treasury account identifier.
+          anyOf:
+            - type: string
+              format: uuid
+            - type: string
+              pattern: '^[a-f0-9]{32}$'
         direction:
           type: string
           enum: [DEBIT, CREDIT]
@@ -753,8 +827,12 @@ components:
             $ref: '#/components/schemas/LedgerEntry'
         limit:
           type: integer
+          minimum: 1
+          maximum: 100
         offset:
           type: integer
+          minimum: 0
+          maximum: 9223372036854775807
 
     ReconciliationReport:
       type: object
