@@ -4,6 +4,8 @@ from ledger_api.domain.errors import (
     InsufficientFundsError,
     ValidationError,
 )
+from ledger_api.ledger.hash_chain import GENESIS_HASH, compute_entry_hash
+from ledger_api.ledger.verification import verify_entries
 from ledger_api.repositories.accounts import AccountRepository
 from ledger_api.repositories.ledger_entries import LedgerEntryRepository
 from ledger_api.repositories.users import UserRepository
@@ -260,3 +262,73 @@ def test_posting_rolls_back_on_failure(
         )
 
         assert wallet["balance_minor"] == 0
+
+def test_hash_chain_across_multiple_postings(
+    db, fake_ids, posting_accounts
+):
+    first = fund_sender(db, fake_ids, posting_accounts)
+    second = fund_sender(db, fake_ids, posting_accounts)
+
+    assert first + second == (1, 2, 3, 4)
+
+    with db.connection() as conn:
+        rows = conn.execute(
+            "SELECT * FROM ledger_entries ORDER BY entry_id"
+        ).fetchall()
+
+        previous_hash = GENESIS_HASH
+
+        for row in rows:
+            assert row["prev_hash"] == previous_hash
+
+            assert row["entry_hash"] == compute_entry_hash(
+                previous_hash,
+                row["transaction_id"],
+                row["account_id"],
+                row["direction"],
+                row["amount_minor"],
+                row["currency"],
+                row["created_at"],
+                row["entry_id"],
+            )
+
+            previous_hash = row["entry_hash"]
+
+        report = LedgerEntryRepository(conn).verify_chain()
+
+        assert report.overall_status == "PASS"
+        assert report.entries_checked == 4
+
+
+def test_empty_ledger_verification(db):
+    with db.connection() as conn:
+        report = LedgerEntryRepository(conn).verify_chain()
+
+    assert report.overall_status == "PASS"
+    assert report.entries_checked == 0
+
+
+def test_verifier_reports_invalid_digest():
+    row = {
+        "entry_id": 1,
+        "transaction_id": "test-transaction",
+        "account_id": "test-account",
+        "direction": "DEBIT",
+        "amount_minor": 500,
+        "currency": "INR",
+        "created_at": TIMESTAMP,
+        "prev_hash": GENESIS_HASH,
+        "entry_hash": "invalid-digest",
+    }
+
+    report = verify_entries([row])
+
+    assert report.overall_status == "FAIL"
+    assert report.first_failing_entry_id == 1
+
+
+def test_verifier_reports_invalid_entry_sequence():
+    report = verify_entries([{"entry_id": 2}])
+
+    assert report.overall_status == "FAIL"
+    assert report.first_failing_entry_id == 2

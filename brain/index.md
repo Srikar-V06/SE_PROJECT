@@ -39,6 +39,7 @@
 - [[skill-eval-local-check]] - Local verification evaluation
 - [[ai-session-phase3-unit-tests]] - Phase 3 unit tests, fixtures and CI coverage
 - [[ai-session-phase3-agents-commands]] - Phase 3 project commands, local HTTPS setup and local-check v2 improvements.
+-  ⁠[[ai-session-phase4-hash-chain]] - Hash-chain engine integration and verification.
 ## Areas
 
 ## Resources
@@ -50,4 +51,5 @@
 - [[mcp-skills-reference]] - Model Context Protocol and skills reference
 - [[idempotency-keys]] - safe retries for keyed operations
 - [[sqlite-acid-wal]] - SQLite transactions, WAL and concurrency
+-⁠  ⁠[[hash-chain-integrity]] - SHA-256 ledger integrity and verification.
 ## Archive
