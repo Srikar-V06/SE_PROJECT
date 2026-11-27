@@ -41,6 +41,7 @@
 - [[ai-session-phase3-agents-commands]] - Phase 3 project commands, local HTTPS setup and local-check v2 improvements.
 -  ⁠[[ai-session-phase4-hash-chain]] - Hash-chain engine integration and verification.
 -⁠  ⁠[[ai-session-phase4-reversals]] - Idempotent transaction reversals and compensating ledger entries.
+-⁠  ⁠[[ai-session-phase4-ledger-reads]] - Authorized transaction details and paginated ledger history.
 ## Areas
 
 ## Resources

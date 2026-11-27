@@ -79,6 +79,32 @@ class LedgerEntryRepository:
             )
         )
 
+    def list_entries(
+        self,
+        *,
+        account_id: str | None = None,
+        transaction_id: str | None = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> list[sqlite3.Row]:
+        return self._connection.execute(
+            "SELECT entry_id, transaction_id, account_id, "
+            "direction, amount_minor, currency, prev_hash, "
+            "entry_hash, created_at FROM ledger_entries "
+            "WHERE (? IS NULL OR account_id = ?) "
+            "AND (? IS NULL OR transaction_id = ?) "
+            "ORDER BY entry_id ASC "
+            "LIMIT ? OFFSET ?",
+            (
+                account_id,
+                account_id,
+                transaction_id,
+                transaction_id,
+                limit,
+                offset,
+            ),
+        ).fetchall()
+
     def verify_chain(self) -> VerificationReport:
         """Verify ledger entries in ascending entry ID order."""
 
@@ -89,3 +115,4 @@ class LedgerEntryRepository:
         )
 
         return verify_entries(rows)
+    

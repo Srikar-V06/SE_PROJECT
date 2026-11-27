@@ -3,7 +3,7 @@
 from typing import Annotated, Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Header, Request, Response
+from fastapi import APIRouter, Depends, Header, Query, Request, Response
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -22,6 +22,7 @@ from ledger_api.domain.errors import NotFoundError
 from ledger_api.repositories.accounts import AccountRepository
 from ledger_api.repositories.sessions import SessionRepository
 from ledger_api.repositories.wallets import WalletRepository
+from ledger_api.services.ledger_reads import LedgerReads
 from ledger_api.services.reversals import ReversalService
 from ledger_api.services.wallet_operations import WalletOperations
 
@@ -100,6 +101,11 @@ class LedgerEntryResponse(BaseModel):
     prev_hash: str
     entry_hash: str
     created_at: str
+
+class LedgerPage(BaseModel):
+    entries: list[LedgerEntryResponse]
+    limit: int
+    offset: int
 
 
 class TransactionResponse(BaseModel):
@@ -244,3 +250,42 @@ def reverse_transaction(
 
     response.status_code = result.status_code
     return result.body
+
+
+@router.get(
+    "/transactions/{transaction_id}",
+    response_model=TransactionResponse,
+)
+def get_transaction(
+    transaction_id: UUID,
+    caller: Caller,
+    auth: Service,
+) -> TransactionResponse:
+    return LedgerReads(auth.db).get_transaction(
+        transaction_id=str(transaction_id),
+        user_id=caller.user.user_id,
+        role=caller.user.role,
+    )
+
+
+@router.get("/ledger-entries", response_model=LedgerPage)
+def get_ledger_entries(
+    caller: Caller,
+    auth: Service,
+    wallet_id: UUID | None = None,
+    transaction_id: UUID | None = None,
+    limit: int = Query(default=50, ge=1, le=100),
+    offset: int = Query(default=0, ge=0, le=2**63 - 1),
+) -> LedgerPage:
+    return LedgerReads(auth.db).get_entries(
+        user_id=caller.user.user_id,
+        role=caller.user.role,
+        wallet_id=str(wallet_id) if wallet_id is not None else None,
+        transaction_id=(
+            str(transaction_id)
+            if transaction_id is not None
+            else None
+        ),
+        limit=limit,
+        offset=offset,
+    )
