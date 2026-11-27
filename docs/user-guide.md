@@ -3,84 +3,188 @@
 ## Overview
 
 The Financial Ledger and Digital Wallet API supports
-authenticated wallet management.
+authenticated wallets, funding, transfers, transaction
+reversals and ledger history.
 
-This guide documents the currently implemented features.
-Additional financial operations will be introduced in
-later phases.
+## Starting the application
 
-## Accessing the application
+From the repository root, install the dependencies and
+start the local server:
 
-Start the application according to the README.
+```bash
+python -m pip install -r requirements.txt
+python -m uvicorn ledger_api.main:app --host 127.0.0.1 --port 8000
+```
 
-Open:
+Open the browser interface at:
 
-- http://127.0.0.1:8000/app/
-- http://127.0.0.1:8000/docs
+http://127.0.0.1:8000/app/
 
-The browser interface is currently a placeholder.
-The implemented API can be exercised through Swagger UI.
+Open the interactive API documentation at:
 
-## Registration
+http://127.0.0.1:8000/docs
 
-Register using a name, email address and password.
+## Registration and login
 
-Endpoint: POST /auth/register
+Select Create account on the login screen.
 
-Public registration creates a USER account.
+Enter your name, email address and a password containing
+12 to 128 characters.
 
-## Login
+After registration, sign in using your email and password.
 
-Endpoint: POST /auth/login
+Public registration creates USER accounts only.
 
-Successful login returns an opaque bearer token with a
-30-minute lifetime.
+The browser stores session tokens in JavaScript memory.
+Reloading the page requires a new login.
 
-Use the token to authorize protected API requests.
-Do not share or log the token.
+Sessions expire after 30 minutes.
 
 ## Wallet management
 
-Create a wallet in INR or USD.
+After signing in, the dashboard displays your own wallets.
 
-Endpoints:
+Select INR or USD and choose Create wallet.
 
-- POST /users/{user_id}/wallets
-- GET /users/me/wallets
-- GET /wallets/{wallet_id}
+A new wallet has a zero balance. Each user can have one
+wallet per supported currency.
 
-Wallets start with a zero balance.
+Use Refresh to retrieve current wallet balances.
 
-Users can create wallets only for their own accounts.
-The backend enforces ownership restrictions.
+## Monetary amounts
 
-## Logout
+The API represents money using integer minor units.
 
-Endpoint: POST /auth/logout
+| Display amount | amount_minor |
+|---|---:|
+| INR 100.50 | 10050 |
+| USD 25.00 | 2500 |
+| INR 0.01 | 1 |
 
-Logout revokes the active session.
+Financial requests require strict integer amounts between
+1 and 1,000,000,000,000 minor units.
 
-## Administrator accounts
+## Transfers
 
-Administrator accounts are created or granted through the
-trusted local provisioning CLI.
+The transfer API is implemented in Phase 4.
 
-Public registration cannot create an ADMIN account.
+Endpoint: POST /transfers
 
-## Planned functionality
+The caller must own the sender wallet.
 
-The following features will be completed in Phases 4 and 5:
+The sender and recipient wallets must use the same currency.
+The amount must be positive and the sender must have
+sufficient funds.
 
-- Wallet funding.
-- Transfers.
-- Transaction history.
-- Reversals.
-- Ledger reconciliation.
-- Complete browser interface.
+A successful transfer returns HTTP 201 with the transaction
+details and balanced ledger entries.
+
+The request must include an Idempotency-Key header.
+
+Transfer operations are currently available through the
+interactive API documentation. The browser transfer screen
+will be introduced in Phase 5.
+
+## Wallet funding
+
+Endpoint: POST /wallets/{wallet_id}/fund
+
+Only administrators can fund wallets.
+
+Funding creates a balanced transaction between the
+system treasury and the selected wallet.
+
+An Idempotency-Key header is required.
+
+## Transaction history
+
+Endpoint: GET /ledger-entries
+
+Normal users must specify an owned wallet_id.
+
+Administrators can query the global ledger.
+
+The endpoint supports wallet_id, transaction_id,
+limit and offset parameters.
+
+Entries appear in ascending entry ID order.
+
+Endpoint: GET /transactions/{transaction_id}
+
+Returns a transaction and its ledger entries.
+Only transaction participants and administrators have access.
+
+## Transaction reversals
+
+Endpoint: POST /transactions/{transaction_id}/reverse
+
+Only administrators can reverse transactions.
+An Idempotency-Key header is required.
+
+Reversal creates a new compensating transaction rather than
+editing or deleting the original entries.
+
+A transaction can be reversed only once. A reversal that
+would leave a wallet with a negative balance is rejected.
+
+## Safe retry behavior
+
+Funding, transfers and reversals require idempotency keys.
+
+If a financial request has an uncertain outcome, retry the
+same operation using the same idempotency key and identical
+request content.
+
+A replay returns the original result.
+
+Do not create a new key for an uncertain retry.
+
+## Administrator provisioning
+
+Administrator accounts are managed through the trusted local
+CLI, not through public registration.
+
+Refer to the developer guide and README for the local
+administrator provisioning procedure.
 
 ## Error handling
 
-The API returns structured JSON errors containing
-code and message fields.
+| Status | Meaning |
+|---|---|
+| 400 | Invalid request |
+| 401 | Authentication required |
+| 403 | Permission denied |
+| 404 | Resource not found |
+| 409 | Conflict or duplicate operation |
+| 422 | Financial business-rule violation |
+| 503 | Database temporarily busy |
+| 500 | Unexpected internal error |
 
-Refer to openapi.yaml for the API contract.
+The API uses a shared JSON error format with code and
+message fields.
+
+## Logout
+
+Choose Sign out from the dashboard.
+
+This revokes the active server-side session and clears the
+browser's authentication state.
+
+If server-side revocation cannot be confirmed, the browser
+clears the local session and displays an appropriate message.
+
+## Phase 5 functionality
+
+The following features remain planned:
+
+- Browser transfer forms and receipts.
+- Browser transaction history.
+- Browser administrator controls.
+- Ledger reconciliation.
+- Complete browser system testing.
+
+## References
+
+- [API specification](openapi.yaml)
+- [Developer guide](developer-guide.md)
+- [UI design](ui-design.md)

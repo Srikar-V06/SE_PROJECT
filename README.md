@@ -8,10 +8,22 @@ It supports idempotent transfers, safe concurrent balance updates, reversals and
 
 ## Status
 
-Phase 3 - Core Implementation I.
+Phase 4 - Core Implementation II.
 
-Database foundation, authentication, wallet operations
-and unit testing have been introduced.
+Implemented functionality includes:
+
+- User authentication and session management.
+- Wallet creation and balance retrieval.
+- Atomic double-entry transaction posting.
+- Ledger hash-chain verification.
+- Idempotent wallet funding and transfers.
+- Administrative transaction reversals.
+- Authorized transaction and ledger history APIs.
+- Browser registration, login and wallet dashboard.
+- Automated integration, regression and lint checks.
+
+Administrative reconciliation and the complete browser
+financial workflows remain Phase 5 tasks.
 
 ## Repository layout
 - `brain/`: team knowledge base (Obsidian vault, PARA folders)

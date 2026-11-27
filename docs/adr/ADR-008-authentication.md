@@ -35,3 +35,12 @@ FR-6, C-7, NFR-9, NFR-10, NFR-13.
 ## Brain notes cited
 
 [[authentication-sessions]]
+
+## Implementation status
+
+The Phase 3 backend authentication implementation uses
+Argon2id, opaque bearer tokens, digest-only session storage
+and server-side expiration and revocation.
+
+The Phase 4 browser client uses these existing endpoints
+and follows the in-memory session design in ADR-010.

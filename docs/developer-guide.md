@@ -47,7 +47,28 @@ python -m pytest --cov=ledger_api --cov=app --cov-report=term-missing
 
 ## Linting
 
+Run Python lint checks:
+
+```bash
 python -m ruff check .
+```
+
+For frontend development, install the locked Node.js
+development dependencies:
+
+```bash
+npm ci
+```
+
+Run JavaScript lint checks:
+
+```bash
+npm run lint:ui
+```
+
+The browser application is served by FastAPI at `/app/`.
+Node.js is required only for frontend development checks,
+not for serving the application.
 
 ## Building
 

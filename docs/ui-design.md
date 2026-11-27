@@ -317,9 +317,13 @@ Phase 5:
 - Responsive layout and accessibility.
 - JavaScript monetary conversion tests.
 
-The existing static application page is a placeholder.
-This document describes the intended design rather than claiming
-that all screens are already implemented.
+The Phase 4 static browser interface implements registration,
+login, wallet creation, the wallet dashboard and logout.
+
+Frontend JavaScript linting is integrated with CI.
+
+Transfer forms, history views, administrator controls and
+complete browser workflow tests remain Phase 5 deliverables.
 
 ## References
 

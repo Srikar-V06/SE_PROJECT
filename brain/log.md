@@ -66,3 +66,5 @@
 - 2026-11-28 | add | Phase 4 browser UI shell and wallet dashboard | Vishwa-Pradyumna
 - 2026-11-28 | add | ESLint, frontend asset tests and UI lint CI integration | Vishwa-Pradyumna
 - 2026-11-28 | add and index | [[ai-session-phase4-ui-shell]] | recorded UI implementation and verification | Vishwa-Pradyumna
+- 2026-11-28 | update | OpenAPI specification, user guide, developer guide and ADRs | Vishwa-Pradyumna
+- 2026-11-28 | update | Phase 4 requirements traceability and API contract verification | Vishwa-Pradyumna
