@@ -58,3 +58,5 @@
 - 2026-11-26 | add and index | [[ai-session-phase4-api-verification]] | recorded API integration results, concurrent retry coverage and HTTP validation error fix | BharathVikas-T
 -⁠  ⁠2026-11-27 | add and index | [[hash-chain-integrity]] | documented ledger hash-chain integrity and verification | haneeshreddy9
 -⁠  ⁠2026-11-27 | add and index | [[ai-session-phase4-hash-chain]] | recorded hash-chain integration and verification tests | haneeshreddy9
+-⁠  ⁠2026-11-27 | add | ADMIN transaction reversal endpoint and compensating ledger postings | haneeshreddy9
+-⁠  ⁠2026-11-27 | add and index | [[ai-session-phase4-reversals]] | recorded reversal implementation and verification | haneeshreddy9

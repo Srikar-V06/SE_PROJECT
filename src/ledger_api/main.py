@@ -60,6 +60,9 @@ async def domain_error(request, exc):
         "INSUFFICIENT_FUNDS": 422,
         "CURRENCY_MISMATCH": 422,
         "DB_BUSY": 503,
+        "ALREADY_REVERSED": 409,
+        "REVERSAL_OF_REVERSAL": 409,
+        "REVERSAL_OVERDRAW": 422,
     }
     status = statuses.get(exc.code)
     if status is None:

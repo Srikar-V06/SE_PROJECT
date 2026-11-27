@@ -40,6 +40,7 @@
 - [[ai-session-phase3-unit-tests]] - Phase 3 unit tests, fixtures and CI coverage
 - [[ai-session-phase3-agents-commands]] - Phase 3 project commands, local HTTPS setup and local-check v2 improvements.
 -  ⁠[[ai-session-phase4-hash-chain]] - Hash-chain engine integration and verification.
+-⁠  ⁠[[ai-session-phase4-reversals]] - Idempotent transaction reversals and compensating ledger entries.
 ## Areas
 
 ## Resources
