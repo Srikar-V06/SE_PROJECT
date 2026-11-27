@@ -81,6 +81,20 @@ These tests are performed only against the isolated test application.
 ## Regression Tests
 
 Every significant corrected defect must have a regression test.
+Track the observed behavior, fix and regression case in the [defect log](defect-log.md).
+
+### Phase 4 integration coverage
+
+| Scenario | Pytest module under `tests/` |
+|---|---|
+| Funding and transfers, insufficient funds, currency mismatch, changed body, concurrent same-key transfer with exactly one posting | `test_wallet_operations_api.py` |
+| Injected failure after posting, rollback and retry, malformed IDs and keys, same key across callers, replay before expiry and fresh posting at expiry using a fake clock | `test_financial_integration.py` |
+| Reversal replay, repeated reversal, reversal of a reversal, overdraw and admin authorization | `test_reversals.py` |
+| Participant-only transaction details and wallet-scoped ledger queries | `test_ledger_reads.py` |
+| Session expiry and logout revocation | `test_auth_wallets.py` |
+
+The service-level same-key race test landed in PR #40 ahead of the transfer
+endpoint in PR #42. PR #43 added the HTTP race test against the completed endpoint.
 
 ## Performance Tests
 

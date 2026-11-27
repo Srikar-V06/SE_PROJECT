@@ -62,3 +62,4 @@
 -⁠  ⁠2026-11-27 | add and index | [[ai-session-phase4-reversals]] | recorded reversal implementation and verification | haneeshreddy9
 -⁠  ⁠2026-11-27 | add | authorized transaction details and paginated ledger read endpoints | haneeshreddy9
 -⁠  ⁠2026-11-27 | add and index | [[ai-session-phase4-ledger-reads]] | recorded ledger read implementation and verification | haneeshreddy9
+- 2026-11-27 | add and index | [[ai-session-phase4-integration]] | recorded integration tests and regression evidence | Srikar-V06
