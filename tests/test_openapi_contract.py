@@ -31,11 +31,11 @@ def test_documented_api_operations_match_implementation():
     assert documented == implemented
 
 
-def test_reconciliation_remains_planned():
+def test_reconciliation_report_matches_documented_fields():
     specification = yaml.safe_load(
         Path("docs/openapi.yaml").read_text(encoding="utf-8")
     )
 
-    operation = specification["paths"]["/admin/reconciliation"]["get"]
-
-    assert operation["x-implementation-status"] == "planned"
+    documented = specification["components"]["schemas"]["ReconciliationReport"]
+    implemented = app.openapi()["components"]["schemas"]["ReconciliationReport"]
+    assert set(documented["required"]) == set(implemented["required"])

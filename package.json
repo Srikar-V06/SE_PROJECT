@@ -2,8 +2,10 @@
   "name": "financial-ledger-ui",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "lint:ui": "eslint src/ledger_api/static"
+    "lint:ui": "eslint src/ledger_api/static",
+    "test:ui": "node --test tests/money.test.mjs"
   },
   "devDependencies": {
     "eslint": "9.39.5"

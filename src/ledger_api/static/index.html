@@ -158,12 +158,62 @@
                 </section>
             </div>
 
-            <section class="panel planned-panel">
-                <h2>Coming in the next phase</h2>
-                <p class="muted">
-                    Transfers, transaction history and administrator
-                    operations will be added in Phase 5.
-                </p>
+            <section class="panel operations-panel">
+                <h2>Transfer funds</h2>
+                <form id="transfer-form" method="post">
+                    <fieldset>
+                        <legend>Transfer details</legend>
+                        <label for="sender">From wallet</label>
+                        <select id="sender" required></select>
+                        <label for="recipient">Recipient wallet ID</label>
+                        <input id="recipient" required>
+                        <label for="transfer-amount">Amount</label>
+                        <input id="transfer-amount" required inputmode="decimal" maxlength="32">
+                        <label for="description">Description (optional)</label>
+                        <input id="description">
+                    </fieldset>
+                    <button>Send transfer</button>
+                </form>
+            </section>
+            <section class="panel operations-panel">
+                <h2>Wallet history</h2>
+                <form id="history-form">
+                    <label for="history-wallet">Wallet</label>
+                    <select id="history-wallet" required></select>
+                    <button>View entries</button>
+                </form>
+                <div id="history-list"></div>
+                <nav aria-label="History pages">
+                    <button id="previous-page" hidden>Previous page</button>
+                    <button id="next-page" hidden>Next page</button>
+                </nav>
+            </section>
+            <section id="admin-panel" class="panel operations-panel" hidden>
+                <h2>Administration</h2>
+                <form id="fund-form" method="post">
+                    <fieldset>
+                        <legend>Fund wallet</legend>
+                        <label for="fund-wallet">Wallet ID to fund</label>
+                        <input id="fund-wallet" required>
+                        <label for="fund-amount">Funding amount</label>
+                        <input id="fund-amount" required inputmode="decimal" maxlength="32">
+                    </fieldset>
+                    <button>Fund wallet</button>
+                </form>
+                <form id="reverse-form" method="post">
+                    <fieldset>
+                        <legend>Reverse transaction</legend>
+                        <label for="reverse-id">Original transaction ID</label>
+                        <input id="reverse-id" required>
+                    </fieldset>
+                    <button>Reverse transaction</button>
+                </form>
+                <button id="reconcile">Run reconciliation</button>
+                <div id="report" aria-live="polite"></div>
+            </section>
+            <section id="receipt" class="panel operations-panel" tabindex="-1" hidden>
+                <h2>Transaction details</h2>
+                <div id="receipt-details"></div>
             </section>
         </section>
 

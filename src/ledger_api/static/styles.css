@@ -252,8 +252,27 @@ select:focus-visible {
     overflow-wrap: anywhere;
 }
 
-.planned-panel {
+.operations-panel {
     margin-top: 24px;
+    overflow-wrap: anywhere;
+}
+
+fieldset {
+    min-width: 0;
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 12px;
+    border: 1px solid var(--border);
+}
+
+.operations-panel button {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+#reconcile, #history-list article {
+    margin-top: 20px;
 }
 
 #status-message {
