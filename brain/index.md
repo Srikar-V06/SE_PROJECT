@@ -1,6 +1,8 @@
 # Brain Index
 
 ## Projects
+- [[stage-three-review]] - Stage 3 evidence and Phase 6 handoff.
+- [[ai-session-phase5-browser]] - Live desktop and mobile-width browser verification.
 - [[ai-session-phase5-reconciliation-ui]] - Reconciliation, tamper and snapshot tests, and the Phase 5 wallet UI.
 - [[ai-session-phase4-integration]] - Phase 4 integration tests, rollback and defect tracking.
 - [[ai-session-phase2-brain-refine]] - AI-assisted record of Bharath's Phase 2 brain refinement and skill evaluations (draft for human review).

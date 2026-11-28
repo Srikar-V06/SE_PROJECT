@@ -1,5 +1,16 @@
 # Test Plan
 
+## Phase 5 browser verification
+
+From the project environment install Playwright with `python -m pip install playwright`,
+then run `python -m playwright install chromium` and
+`python -m pytest -q tests/browser/wallet_browser.py`. Set `BROWSER_CHANNEL=msedge`
+to use an installed Microsoft Edge. Each case starts a loopback server with a
+fresh temporary database. At base ac7ceed on Windows, both 1280 px and 360 px
+passed registration, login, wallet creation, funding, duplicate submit while
+pending, retry after a lost committed response, history, reversal, reconciliation
+and logout. The backend suite passed 89 cases and Node passed two money tests.
+
 ## Objective
 
 Verify all functional and non-functional requirements using automated
