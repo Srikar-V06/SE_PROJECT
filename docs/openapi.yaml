@@ -4,10 +4,9 @@ info:
   title: Financial Ledger and Digital Wallet API
   version: 0.2.0
   description: >
-    Phase 4 API contract aligned with SRS v2.0.
+    API contract aligned with SRS v2.0.
     Authentication, wallet management, funding, transfers,
-    reversals and ledger reads are implemented.
-    Administrative reconciliation remains planned for Phase 5.
+    reversals, ledger reads and administrative reconciliation are implemented.
 
 security:
   - bearerAuth: []
@@ -428,12 +427,9 @@ paths:
   /admin/reconciliation:
     get:
       summary: Reconcile ledger and wallet balances
-      x-implementation-status: planned
       description: >
         FR-5. ADMIN only.
         Read-only check using one consistent database snapshot.
-        This endpoint is planned for Phase 5 and is not
-        implemented in Phase 4.
       responses:
         '200':
           description: Reconciliation report

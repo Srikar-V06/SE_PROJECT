@@ -23,6 +23,7 @@ from ledger_api.repositories.accounts import AccountRepository
 from ledger_api.repositories.sessions import SessionRepository
 from ledger_api.repositories.wallets import WalletRepository
 from ledger_api.services.ledger_reads import LedgerReads
+from ledger_api.services.reconciliation import ReconciliationReport, reconcile
 from ledger_api.services.reversals import ReversalService
 from ledger_api.services.wallet_operations import WalletOperations
 
@@ -120,6 +121,11 @@ class TransactionResponse(BaseModel):
 @router.post("/auth/register", status_code=201)
 def register(data: Registration, auth: Service) -> User:
     return auth.register(data)
+
+
+@router.get("/admin/reconciliation")
+def get_reconciliation(caller: Administrator, auth: Service) -> ReconciliationReport:
+    return reconcile(auth.db, auth.clock)
 
 
 @router.post("/auth/login")

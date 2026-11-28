@@ -1,6 +1,7 @@
 # Brain Index
 
 ## Projects
+- [[ai-session-phase5-reconciliation-ui]] - Reconciliation, tamper and snapshot tests, and the Phase 5 wallet UI.
 - [[ai-session-phase4-integration]] - Phase 4 integration tests, rollback and defect tracking.
 - [[ai-session-phase2-brain-refine]] - AI-assisted record of Bharath's Phase 2 brain refinement and skill evaluations (draft for human review).
 - [[ai-session-phase3-backend-core]] - AI-assisted record of the Phase 3 backend core implementation commits (draft for human review).

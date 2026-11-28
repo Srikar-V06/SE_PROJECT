@@ -1,3 +1,5 @@
+import { setupOperations } from "./operations.js";
+
 const loginView = document.getElementById("login-view");
 const registerView = document.getElementById("register-view");
 const dashboardView = document.getElementById("dashboard-view");
@@ -16,6 +18,8 @@ let session = null;
 let currentUser = null;
 let expiryTimer = null;
 let busy = false;
+
+const operations = setupOperations({ api, runAction, showMessage, refreshWallets, formatBalance });
 
 
 function showMessage(message, type = "") {
@@ -41,6 +45,7 @@ function clearSession(message = "", type = "") {
     }
 
     walletList.replaceChildren();
+    operations.clear();
     emptyWallets.hidden = false;
     welcomeName.textContent = "";
     userRole.textContent = "";
@@ -67,7 +72,7 @@ async function runAction(action) {
         button.disabled = true;
     }
 
-    showMessage("");
+    showMessage("Loading…");
 
     try {
         await action();
@@ -87,7 +92,8 @@ async function api(path, options = {}) {
     const {
         method = "GET",
         body,
-        authenticated = true
+        authenticated = true,
+        idempotencyKey
     } = options;
 
     const activeSession = session;
@@ -95,6 +101,9 @@ async function api(path, options = {}) {
     const headers = {
         Accept: "application/json"
     };
+    if (idempotencyKey) {
+        headers["Idempotency-Key"] = idempotencyKey;
+    }
 
     if (body !== undefined) {
         headers["Content-Type"] = "application/json";
@@ -167,6 +176,9 @@ async function api(path, options = {}) {
     }
 
     if (!response.ok) {
+        if (response.status === 503) {
+            throw new Error("The database is busy. Please try again.");
+        }
         if (response.status >= 500) {
             throw new Error("The server is unavailable. Please try again.");
         }
@@ -176,7 +188,9 @@ async function api(path, options = {}) {
                 ? data.message
                 : "The request could not be completed.";
 
-        throw new Error(message);
+        const error = new Error(message);
+        error.definitive = true;
+        throw error;
     }
 
     return data;
@@ -205,6 +219,7 @@ function formatBalance(amountMinor, currency) {
 
 
 function renderWallets(wallets) {
+    operations.setWallets(wallets);
     walletList.replaceChildren();
 
     emptyWallets.hidden = wallets.length !== 0;
@@ -247,6 +262,7 @@ async function loadDashboard() {
 
     welcomeName.textContent = `Welcome, ${user.name}`;
     userRole.textContent = user.role;
+    document.getElementById("admin-panel").hidden = user.role !== "ADMIN";
 
     await refreshWallets();
 
